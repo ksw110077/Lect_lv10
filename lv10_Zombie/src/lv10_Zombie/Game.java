@@ -39,7 +39,7 @@ public class Game {
 	private void inputPName() {
 		System.out.print("좀비 사냥꾼의 이름은 ?: ");
 		String name = sc.next();
-		this.h = new Hero(name, 200, 10, 1, 1);
+		this.h = new Hero(name, 200, 150, 1, 1);
 	}
 
 	private void init() {
@@ -222,7 +222,6 @@ public class Game {
 	private void winBonusAtt() {
 		int rN = rn.nextInt(2);
 		if (rN == 0) {
-			System.out.println("놀라운 기적!!!");
 			System.out.println("좀비에게 승리해 공격력이 1 증가했다.");
 			this.h.setAtt(this.h.getAtt() + 1);
 		}
@@ -231,7 +230,6 @@ public class Game {
 	private void winBonusDef() {
 		int rN = rn.nextInt(2);
 		if (rN == 0) {
-			System.out.println("놀라운 기적!!!");
 			System.out.println("좀비에게 승리해 방어력이 1 증가했다.");
 			this.h.setDef(this.h.getDef() + 1);
 		}
@@ -266,6 +264,7 @@ public class Game {
 			if (zombie.getHp() <= 0) {
 				System.out.printf("\n%s의 승리\n", this.h.getName());
 				this.h.setFloor(this.h.getFloor() + 1);
+				System.out.println("놀라운 기적!!!");
 				winBonusAtt();
 				winBonusDef();
 				winBonusHeal();
@@ -291,9 +290,6 @@ public class Game {
 			if (this.zk.getHp() <= 0) {
 				System.out.printf("\n%s의 승리\n", this.h.getName());
 				this.h.setFloor(this.h.getFloor() + 1);
-				winBonusAtt();
-				winBonusDef();
-				winBonusHeal();
 				chk = 0;
 			} else {
 				System.out.println("\n좀비의 반격!!!");

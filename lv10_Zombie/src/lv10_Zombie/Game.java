@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import interfaces.Shielder;
+
 public class Game {
 	// Singleton
 	private Game() {} // 기본 생성자 제한
@@ -14,8 +16,8 @@ public class Game {
 	public static Random rn= new Random();
 	public static Scanner sc = new Scanner(System.in);
 	private Hero h;
-	private ArrayList<Zombie> monster = new ArrayList<>(); 
 	private ZombieKing zk;
+	private ArrayList<Zombie> monster = new ArrayList<>(); 
 	private void init() {
 		for(int i = 1; i < 5; i++) {
 			String name = ranName();
@@ -271,7 +273,7 @@ public class Game {
 			}
 			else {
 				System.out.println("\n좀비의 반격!!!");
-				zombie.attack(this.h);
+				zombie.attack((Unit)this.h);
 				printFightState();
 				if(this.h.getHp() <= 0) {
 					System.out.println("플레이어는 좀비에게 죽었다.");
@@ -281,15 +283,14 @@ public class Game {
 			}
 		}
 		else {
-			ZombieKing zombie = this.zk;
-			this.h.attack(zombie);
+			this.h.attack((Shielder)this.zk);
 			printFightState();
 			try {
 				Thread.sleep(1200);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			if(zombie.getHp() <= 0) {
+			if(this.zk.getHp() <= 0) {
 				System.out.printf("\n%s의 승리\n",this.h.getName());
 				this.h.setFloor(this.h.getFloor() + 1);
 				winBonusAtt();
@@ -299,7 +300,7 @@ public class Game {
 			}
 			else {
 				System.out.println("\n좀비의 반격!!!");
-				zombie.attack(this.h);
+				this.zk.attack((Unit)this.h);
 				printFightState();
 				if(this.h.getHp() <= 0) {
 					System.out.println("플레이어는 좀비에게 죽었다.");
@@ -327,10 +328,18 @@ public class Game {
 		boolean isRun = true;
 		while(isRun) {
 			System.out.println();
-			printFloor();
+			if(this.h.getFloor() == 6) {
+				System.out.println("용사는 탑을 정복했다");
+				System.out.println("YOU WIN!!!");
+				break;
+			}
+			else {
+				printFloor();
+			}
 			if(this.h.getFloor() < 5) {
 				if(ranAppear()) {
 					printAppear();
+					isRun = chkAlive();
 					isRun = selAppear();
 				}
 				else {
@@ -340,14 +349,9 @@ public class Game {
 			}
 			else if(this.h.getFloor() == 5){
 				printAppear();
+				isRun = chkAlive();
 				isRun = selAppear();
 			}
-			else if(this.h.getFloor() == 6) {
-				System.out.println("용사는 탑을 정복했다");
-				System.out.println("YOU WIN!!!");
-				break;
-			}
-			isRun = chkAlive();
 		}
 	}
 }

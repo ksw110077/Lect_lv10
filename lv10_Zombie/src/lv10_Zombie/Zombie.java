@@ -1,12 +1,18 @@
 package lv10_Zombie;
 
 import interfaces.Att;
+import interfaces.Shielder;
 
 public class Zombie extends Unit implements Att{
 	public Zombie(String name,int MaxHp,int att,int def,int floor) {
 		super(name, MaxHp, att, def,floor);
 	}
 	
+	@Override
+	public boolean attack(Shielder shielder) {
+		return false;
+	}
+
 	@Override
 	public boolean attack(Unit target) {
 		boolean cantKill = true;

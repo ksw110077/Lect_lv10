@@ -1,6 +1,6 @@
 package lv10_Zombie;
 
-public class Unit {
+public abstract class Unit {
 	private String name; // 이름
 	private int hp; // 체력
 	private int MaxHp; // 최대 체력
@@ -46,7 +46,7 @@ public class Unit {
 	}
 
 	
-	protected Unit(String name,int MaxHp,int att,int def,int floor){
+	protected  Unit(String name,int MaxHp,int att,int def,int floor){
 		this.name = name;
 		this.hp = MaxHp;
 		this.MaxHp = MaxHp;
@@ -54,7 +54,6 @@ public class Unit {
 		this.def = def;
 		this.floor = floor;
 	}
-	
 	@Override
 	public String toString() {
 		String str = "";
@@ -62,6 +61,4 @@ public class Unit {
 		str += "[공격력] : " + "[" + this.att + "]" + "\t" + "[방어력] : " + "[" + this.def + "]";
 		return str;
 	}
-
-	
 }

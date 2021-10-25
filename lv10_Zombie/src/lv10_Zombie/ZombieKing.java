@@ -44,14 +44,15 @@ public class ZombieKing extends Unit implements Shielder, Att{
 		}
 		return cantKill;
 	}
-	
+
 	@Override
-	public String toString() {
+	String printAll() {
 		String str = "";
 		str += "[이름] : " + "[" + super.getName() + "]" + "\t" + "[체력] : " + "[" + super.getHp() + " / " + super.getMaxHp() + "]\n";
 		str += "[실드] : ["+ this.Shield +"]\n";
 		str += "[공격력] : " + "[" + super.getAtt() + "]" + "\t" + "[방어력] : " + "[" + super.getDef() + "]";
 		return str;
 	}
+	
 
 }

@@ -46,7 +46,7 @@ public abstract class Unit {
 	}
 
 	
-	protected  Unit(String name,int MaxHp,int att,int def,int floor){
+	protected Unit(String name,int MaxHp,int att,int def,int floor){
 		this.name = name;
 		this.hp = MaxHp;
 		this.MaxHp = MaxHp;
@@ -54,11 +54,6 @@ public abstract class Unit {
 		this.def = def;
 		this.floor = floor;
 	}
-	@Override
-	public String toString() {
-		String str = "";
-		str += "[이름] : " + "[" + this.name + "]" + "\t" + "[체력] : " + "[" + this.hp + " / " + this.MaxHp + "]\n";
-		str += "[공격력] : " + "[" + this.att + "]" + "\t" + "[방어력] : " + "[" + this.def + "]";
-		return str;
-	}
+	
+	abstract String printAll();
 }

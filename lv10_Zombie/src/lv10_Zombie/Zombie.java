@@ -33,4 +33,12 @@ public class Zombie extends Unit implements Att{
 		}
 		return cantKill;
 	}
+
+	@Override
+	String printAll() {
+		String str = "";
+		str += "[이름] : " + "[" + super.getName() + "]" + "\t" + "[체력] : " + "[" + super.getHp() + " / " + super.getMaxHp() + "]\n";
+		str += "[공격력] : " + "[" + super.getAtt() + "]" + "\t" + "[방어력] : " + "[" + super.getDef() + "]";
+		return str;
+	}
 }

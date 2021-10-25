@@ -48,8 +48,15 @@ public class Hero extends Unit implements Att, Drink, Shielder{
 		
 		if(shield > 0) {
 			shield -= dam;
-			if(shield <= 0) {
+			if(shield == 0) {
 				target.setShield(0);
+				System.out.printf("%d의 데미지 \n", dam);
+				System.out.println("좀비킹의 실드가 부서졌다!!");
+			}
+			else if (shield < 0) {
+				int tempDam = shield * -1;
+				target.setShield(0);
+				target.setHp(targetHp - tempDam);
 				System.out.printf("%d의 데미지 \n", dam);
 				System.out.println("좀비킹의 실드가 부서졌다!!");
 			}
@@ -61,6 +68,7 @@ public class Hero extends Unit implements Att, Drink, Shielder{
 			}
 		}
 		else {
+			target.setHp(targetHp - dam);
 			System.out.printf("%d의 데미지 \n", dam);
 			
 			if(targetHp == 0) {
@@ -94,5 +102,13 @@ public class Hero extends Unit implements Att, Drink, Shielder{
 			cantKill = false;
 		}
 		return cantKill;
+	}
+
+	@Override
+	String printAll() {
+		String str = "";
+		str += "[이름] : " + "[" + super.getName() + "]" + "\t" + "[체력] : " + "[" + super.getHp() + " / " + super.getMaxHp() + "]\n";
+		str += "[공격력] : " + "[" + super.getAtt() + "]" + "\t" + "[방어력] : " + "[" + super.getDef() + "]";
+		return str;
 	}
 }

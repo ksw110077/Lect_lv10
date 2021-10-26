@@ -17,8 +17,6 @@ public abstract class User {
 	}
 	
 	abstract String printAll(); // 출력
-
-	
 	
 	public String getName() {
 		return this.name;

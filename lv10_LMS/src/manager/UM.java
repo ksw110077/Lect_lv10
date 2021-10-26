@@ -8,4 +8,7 @@ public class UM {
 		return instance;
 	}
 	
+	public void printUMMenu() {
+	}
+	
 }

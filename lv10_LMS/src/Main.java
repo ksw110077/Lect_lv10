@@ -1,3 +1,5 @@
+import manager.LMS;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -29,6 +31,7 @@ public class Main {
 		
 		종료 할때 저장 처리
 		*/
+		LMS.getinstance().run();
 	}
 
 }

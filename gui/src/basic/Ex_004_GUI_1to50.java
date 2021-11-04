@@ -67,11 +67,11 @@ class OTFResultFrame extends JFrame implements ActionListener {
 			JButton target = (JButton) e.getSource();
 			if (target == this.reset) {
 //				OneToFiftyFrame.c.stop();
-				OneToFiftyPanel.ctrlStart = false;
+				OneToFiftyPanel.ctrlStart = false; // == stop() ????
 				OneToFiftyFrame.a.resetAll();
 				Runnable b = OneToFiftyFrame.a;
 				OneToFiftyFrame.c = new Thread(b);
-				OneToFiftyFrame.c.start();
+				OneToFiftyFrame.c.start(); // 이전 스레드 어떻게 되는건가 흠
 				dispose();
 			}
 		}
@@ -108,8 +108,8 @@ class OneToFiftyPanel extends JPanel implements ActionListener, Runnable {
 	}
 
 	public void resetAll() {
-		setNumMap();
-		ctrlStart = true;
+		setNumMap(); // 넘버 맵 초기화
+		ctrlStart = true; // 스레드 판별값
 		cnt = 1;
 		milli = 0.0;
 		timer.setText("0.000");
@@ -242,7 +242,9 @@ class OneToFiftyPanel extends JPanel implements ActionListener, Runnable {
 
 	@Override
 	public void run() {
+		
 		while (ctrlStart) {
+			
 			try {
 				if(cnt == 1) {
 					timer.setText("0.000");
@@ -250,11 +252,11 @@ class OneToFiftyPanel extends JPanel implements ActionListener, Runnable {
 				else if (cnt > 1) {
 					milli += 0.001;
 					timer.setText("" + form.format(milli));
-					Thread.sleep(1);
 				}
+				Thread.sleep(1);
 			} catch (Exception e) {
 			}
-			if (cnt == 51) {
+			if (cnt == 51) { // 50 까지 다 클릭하면 실행 종료
 //				OneToFiftyFrame.c.stop();
 				ctrlStart = false;
 				break;
@@ -286,7 +288,7 @@ class OneToFiftyFrame extends JFrame {
 	private void cRun() {
 		Runnable b = a;
 		c = new Thread(b);
-		c.start();
+		c.start(); // 스레드 시작
 	}
 }
 

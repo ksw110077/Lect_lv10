@@ -55,7 +55,7 @@ class OTFResultFrame extends JFrame implements ActionListener {
 		this.reset.setBackground(new Color(68, 102, 170));
 		this.reset.setForeground(Color.white);
 		this.reset.addActionListener(this);
-		this.reset.setFont(new Font("NanumGothicBold", Font.PLAIN, 20));
+		this.reset.setFont(new Font("NanumGothicBold", Font.PLAIN, 15));
 		this.reset.setVerticalAlignment(JButton.CENTER);
 		this.reset.setHorizontalAlignment(JButton.CENTER);
 		add(this.reset);

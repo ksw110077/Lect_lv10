@@ -140,7 +140,7 @@ class TTTGame {
 	}
 }
 
-public class Ex_002_GUI예제TICTACTOE {
+public class Test_002_GUI예제TICTACTOE {
 	public static void main(String[] args) {
 		TTTGame g = new TTTGame();
 		g.run();

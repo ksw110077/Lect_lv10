@@ -265,7 +265,7 @@ class Game extends JFrame{
 	}
 }
 
-public class Ex_004_GUI_1to51_정답 {
+public class Test_004_GUI_1to51_정답 {
 
 	public static void main(String[] args) {
 		Game game = new Game();

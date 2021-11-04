@@ -35,7 +35,7 @@ class Clock extends JFrame {
 }
 
 
-public class Ex_004_타이머힌트 {
+public class Test_004_타이머힌트 {
 
 	public static void main(String[] args) {
 		Clock clock = new Clock();

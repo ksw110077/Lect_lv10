@@ -216,7 +216,7 @@ class TTTGFrame extends JFrame {
 	}
 }
 
-public class Ex_003_GUI_TicTacToe {
+public class Test_003_GUI_TicTacToe {
 
 	public static void main(String[] args) {
 		TTTGFrame tf = new TTTGFrame();

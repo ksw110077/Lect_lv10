@@ -292,7 +292,7 @@ class OneToFiftyFrame extends JFrame {
 	}
 }
 
-public class Ex_004_GUI_1to50 {
+public class Test_004_GUI_1to50 {
 
 	public static void main(String[] args) {
 		OneToFiftyFrame otff = new OneToFiftyFrame();

@@ -43,7 +43,7 @@ class PlayMusic implements Runnable{
 }
 
 
-public class Ex_005_쓰레드 {
+public class Ex_002_쓰레드 {
 
 	public static void main(String[] args) {
 		PlayGame play = new PlayGame();

@@ -230,7 +230,7 @@ class TicFrame extends JFrame{
 	}
 }
 
-public class Ex_002_GUI예제TICTACTOE_정답 {
+public class Test_002_GUI예제TICTACTOE_정답 {
 	public static void main(String[] args) {
 		TicFrame tf = new TicFrame();
 	}

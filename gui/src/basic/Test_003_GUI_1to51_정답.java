@@ -131,19 +131,22 @@ class GamePanel extends JPanel implements ActionListener, Runnable{
 		
 		for(int i=0; i < this.SIZE; i++) {
 			for(int j=0; j < this.SIZE; j++) {
-				this.map[i][j] = new JButton();
+				this.map[i][j] = new JButton(); // 1. 인스턴스만 존재 (집터)
+				
 				// 버튼의 속성 설정
-				this.map[i][j].setBounds(x,y,100,100);
-				this.map[i][j].setText(this.front[i][j] + "");
+				this.map[i][j].setBounds(x,y,100,100); // 2. 크기 & 위치
+				this.map[i][j].setText(this.front[i][j] + ""); // 3. 간판
 				this.map[i][j].setFont(new Font("", Font.PLAIN, 20));
 				this.map[i][j].setForeground(Color.white);
+				this.map[i][j].setBackground(this.frontC);
 				
 				//on mac
 				this.map[i][j].setOpaque(true);
 				this.map[i][j].setBorderPainted(false);
 				
-				this.map[i][j].setBackground(this.frontC);
-				this.map[i][j].addActionListener(this);
+				
+				// 4. 초인종 설치 (ActionListener를 통해 actionPerformed() 메소드를 오버라이딩함)
+				this.map[i][j].addActionListener(this); 
 				
 				add(this.map[i][j]);
 				
@@ -153,6 +156,8 @@ class GamePanel extends JPanel implements ActionListener, Runnable{
 			y += 100 + 3;
 		}
 	}
+	
+	// 4 -2. 초인종이 눌리면 -> 어떤 반응을 보일지를 설계
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() instanceof JButton) {

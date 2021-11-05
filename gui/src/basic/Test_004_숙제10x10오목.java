@@ -28,6 +28,10 @@ class OmokResult extends JFrame{
 		dispose();
 	}
 	
+	public void setDraw() {
+		this.winnerText.setText("DRAW!!!!");
+	}
+	
 	public void setWinnerText() {
 		this.winnerText.setBounds(0,0,500,140);
 		this.winnerText.setBackground(Color.white);
@@ -232,6 +236,18 @@ class OPanel extends JPanel implements ActionListener{
 		}
 	}
 	
+	private boolean markCnt() {
+		boolean chk = true;
+		for(int i = 0; i < this.SIZE; i++) {
+			for(int j = 0; j < this.SIZE; j++) {
+				if(this.map[i][j].getText().equals("")) { // 한 개라도 빈 곳이 있을 때
+					chk = false;
+				}
+			}
+		}
+		return chk;
+	}
+	
 	private void winChk() {
 		chkGa();
 		chkSe();
@@ -241,6 +257,12 @@ class OPanel extends JPanel implements ActionListener{
 		if(this.end) {
 			winner = this.turn;
 			this.closer = new OmokResult();
+		}
+		else {
+			if(markCnt()) {
+				this.closer = new OmokResult();
+				this.closer.setDraw();
+			}
 		}
 	}
 	

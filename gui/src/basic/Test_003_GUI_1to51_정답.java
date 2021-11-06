@@ -266,7 +266,9 @@ class Game extends JFrame{
 		setVisible(true);
 		revalidate();
 		
+		// JPanel 생성, 추가 후에 run 메소드 호출
 		this.panel.run(); // 생성된 Runnable의 run() 메소드를 호출, 프레임을 띄운 후 - > 스레드 가동
+		// run() 메소드는 계속 돌고 있음, isRun이 false가 돼도 조건문을 실행하지 않을뿐 스레드는 계속 가동중
 	}
 }
 

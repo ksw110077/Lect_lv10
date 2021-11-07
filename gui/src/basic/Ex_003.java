@@ -90,7 +90,10 @@ class MyPanel03 extends JPanel implements MouseListener{
 		}
 		
 	}
+	
+	
 	// paintComponent() 메소드 오버라이딩(JComponent로);
+	
 	
 	@Override
 	protected void paintComponent(Graphics g) { // JComponent, 페인트 스레드가 돌고 있음
@@ -98,9 +101,9 @@ class MyPanel03 extends JPanel implements MouseListener{
 		super.paintComponent(g); // 그래픽을 지움 (갱신)
 		
 		
-//		g.setColor(Color.red);
-//		g.drawRect(100, 100, 100, 100); // 좌표 x,좌표 y, 가로 , 세로
-//		g.fillRect(100, 100, 100, 100);
+//		g.setColor(Color.blue);
+//		g.drawRect(100, 100, 100, 100); // 좌표 x,좌표 y, 가로 , 세로 // 네모 그리기
+//		g.fillRect(100, 100, 100, 100); // 채우기
 		
 //		g.setColor(this.nemo.getC());
 //		g.drawRect(this.nemo.getX(), this.nemo.getY(), this.nemo.getWidth(), this.nemo.getHeight());
@@ -111,8 +114,18 @@ class MyPanel03 extends JPanel implements MouseListener{
 			for (int j = 0; j < 3; j++) {
 				Nemo temp = this.map[i][j];
 				g.setColor(temp.getC());
-				// 네모 그리기
+//				// 네모 그리기
 //				g.drawRect(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight());
+				// 원 그리기
+				g.fillRoundRect(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight(),temp.getWidth(), temp.getHeight());
+			}
+		}
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				Nemo temp = this.map[i][j];
+				g.setColor(temp.getC());
+				// 네모 그리기
+				g.drawRect(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight());
 				// 원 그리기
 				g.fillRoundRect(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight(),temp.getWidth(), temp.getHeight());
 			}
@@ -148,6 +161,11 @@ class MyPanel03 extends JPanel implements MouseListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		System.out.println("릭");
+		
+		int x = e.getX();
+		int y = e.getY();
+		
+		System.out.println(x + " / " + y);
 	}
 
 	@Override

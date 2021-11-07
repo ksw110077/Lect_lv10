@@ -274,6 +274,7 @@ class MouseOmokPanel extends JPanel implements ActionListener, MouseListener{
 	private void resetGame() {
 		this.turn = 1;
 		this.win = 0;
+		this.viewTurn.setForeground(Color.black);
 		this.viewTurn.setText(String.format("Player %d ☞",this.turn));
 		resetDol();
 		resetMap();

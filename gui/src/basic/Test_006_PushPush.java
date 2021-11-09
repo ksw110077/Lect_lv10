@@ -60,7 +60,7 @@ class PushPanel extends JPanel implements MouseListener, Runnable{
 	private final int DOWN = 2;
 	private final int RIGHT = 3;
 	
-	private final int SIZE = PushFrame.SIZE;
+	private final int SIZE = 800;
 	
 	
 	private PushNemo move;
@@ -103,8 +103,8 @@ class PushPanel extends JPanel implements MouseListener, Runnable{
 	}
 	
 	private void setArrow() {
-		int x = PushFrame.SIZE - 50 - 50 - 10 - 50;
-		int y = PushFrame.SIZE - 50 - 50 - 10 - 50;
+		int x = 800 - 50 - 50 - 10 - 50;
+		int y = 800 - 50 - 50 - 10 - 50;
 		for(int i =0; i < this.arrow.length; i++) {
 			this.arrow[i] = new JButton();
 			if(i == 0) {
@@ -374,7 +374,7 @@ class PushFrame extends JFrame{
 	private Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
 	private final int W = dm.width;
 	private final int H = dm.height;
-	public static final int SIZE = 800;
+	public static final int SIZE = 900;
 	
 	public PushFrame() {
 		setLayout(null);

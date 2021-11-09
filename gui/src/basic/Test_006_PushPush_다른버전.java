@@ -362,7 +362,7 @@ class PushFrame03 extends JFrame{
 	private Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
 	private final int W = dm.width;
 	private final int H = dm.height;
-	public static final int SIZE = 800;
+	public static final int SIZE = 900;
 	
 	public PushFrame03() {
 		setLayout(null);

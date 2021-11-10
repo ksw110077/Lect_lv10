@@ -18,6 +18,14 @@ class SnakeRect01{
 
 
 class Game001 extends JPanel implements KeyListener{
+	
+	private final int SIZE = 10; 
+	private SnakeRect01 [] [] map = new SnakeRect01[this.SIZE][this.SIZE];
+	
+	private SnakeRect01 [] snakeRect01 = new SnakeRect01[4]; // <- ArrayList<SnakeRect01>
+	private int [][] yx = new int [4][2];										   // map 인데스 좌표 정보를 기억
+																								   // {{y,x},{y,x},{y,x},{y,x}};
+	
 	public Game001() {
 		setLayout(null);
 		setBounds(0,0,700,500);

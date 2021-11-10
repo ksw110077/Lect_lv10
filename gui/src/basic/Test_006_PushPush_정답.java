@@ -71,6 +71,8 @@ class PushPanel02 extends JPanel implements ActionListener, MouseListener{
 	private int dir; // 0Left 1Down 2Right 3Up
 	private boolean isMoving;
 	
+	private boolean check;
+	
 	public PushPanel02() {
 		setLayout(null);
 		setBounds(0,0,this.SIZE, this.SIZE);
@@ -95,8 +97,8 @@ class PushPanel02 extends JPanel implements ActionListener, MouseListener{
 			
 			// 검증
 			
-			if(rX < this.nemo1.getX() || rX > this.nemo1.getX() + this.nemo1.getW() 
-			|| rY < this.nemo1.getY() || rY > this.nemo1.getY() + this.nemo1.getH()) {
+			if(rX + this.nemo1.getW() < this.nemo1.getX() || rX > this.nemo1.getX() + this.nemo1.getW() 
+			|| rY + this.nemo1.getH() < this.nemo1.getY() || rY > this.nemo1.getY() + this.nemo1.getH()) {
 				break;
 			}
 		}
@@ -136,8 +138,13 @@ class PushPanel02 extends JPanel implements ActionListener, MouseListener{
 		if(this.nemo1 != null && this.nemo2 != null) {
 			g.setColor(Color.black);
 			g.drawRect(this.nemo1.getX(), this.nemo1.getY(), this.nemo1.getW(), this.nemo1.getH());
-
-			g.setColor(Color.blue);
+			
+			if(this.check) {
+				g.setColor(Color.red);
+			}
+			else {
+				g.setColor(Color.blue);
+			}
 			g.drawRect(this.nemo2.getX(), this.nemo2.getY(), this.nemo2.getW(), this.nemo2.getH());
 		}
 		
@@ -186,27 +193,30 @@ class PushPanel02 extends JPanel implements ActionListener, MouseListener{
 	}
 
 	private void update() {
+		checkSecond();
+		
 		if(this.dir == this.LEFT) {
-			if(this.nemo1.getX() > 0 ) {
+			if((!this.check && this.nemo1.getX() > 0) || (this.check && this.nemo2.getX() > 0)) {
 				this.nemo1.setX(this.nemo1.getX() -1);
 			}
 		}
 		if(this.dir == this.DOWN) {
-			if(this.nemo1.getY() < this.SIZE - this.nemo1.getH()) {
+			if(!this.check && this.nemo1.getY() < this.SIZE - this.nemo1.getH() || (this.check && this.nemo2.getY() < this.SIZE - this.nemo2.getH())) {
 				this.nemo1.setY(this.nemo1.getY() +1);
 			}
 		}
 		if(this.dir == this.RIGHT) {
-			if(this.nemo1.getX() < this.SIZE - this.nemo1.getW() ) {
+			if(!this.check && this.nemo1.getX() < this.SIZE - this.nemo1.getW() || (this.check && this.nemo2.getX() < this.SIZE - this.nemo2.getW())) {
 				this.nemo1.setX(this.nemo1.getX() +1);
 			}
 		}
 		if(this.dir == this.UP) {
-			if(this.nemo1.getY() > 0) {
+			if(!this.check && this.nemo1.getY() > 0 || (this.check && this.nemo2.getY() > 0)) {
 				this.nemo1.setY(this.nemo1.getY() -1);
 			}
 		}
-		checkSecond();
+		
+		this.check = false;
 //		try {
 //			Thread.sleep(5);
 //		} catch (Exception e) {
@@ -216,35 +226,55 @@ class PushPanel02 extends JPanel implements ActionListener, MouseListener{
 
 	private void checkSecond() {
 		if (this.dir == this.LEFT) {
-			if (this.nemo2.getX() + this.nemo2.getW() == this.nemo1.getX()
+			if (this.nemo2.getX() + this.nemo2.getW() >= this.nemo1.getX()
 					&& this.nemo2.getY() > this.nemo1.getY() - this.nemo1.getH()
 					&& this.nemo2.getY() < this.nemo1.getY() + this.nemo1.getH()) {
-				this.nemo2.setX(this.nemo2.getX() - 1);
+//					&& this.nemo2.getX() > 0) {
+						if(this.nemo2.getX() > 0) {
+							this.nemo2.setX(this.nemo2.getX() - 1);
+						}
+				this.check = true;
 			}
 		} else if (this.dir == this.DOWN) {
-			if (this.nemo2.getY() == this.nemo1.getY() + this.nemo1.getH()
+			if (this.nemo2.getY() <= this.nemo1.getY() + this.nemo1.getH()
 					&& this.nemo2.getX() > this.nemo1.getX() - this.nemo1.getW()
 					&& this.nemo2.getX() < this.nemo1.getX() + this.nemo1.getW()) {
-				this.nemo2.setY(this.nemo2.getY() + 1);
+//					&& this.nemo2.getY() < this.SIZE - this.nemo2.getH()) {
+				if(this.nemo2.getY() < this.SIZE - this.nemo2.getH()) {
+					this.nemo2.setY(this.nemo2.getY() + 1);
+				}
+				this.check = true;
 			}
 		} else if (this.dir == this.RIGHT) {
-			if (this.nemo2.getX() == this.nemo1.getX() + this.nemo1.getW()
+			if (this.nemo2.getX() <= this.nemo1.getX() + this.nemo1.getW()
 					&& this.nemo2.getY() > this.nemo1.getY() - this.nemo1.getH()
 					&& this.nemo2.getY() < this.nemo1.getY() + this.nemo1.getH()) {
-				this.nemo2.setX(this.nemo2.getX() + 1);
+//					&& this.nemo2.getX() < this.SIZE - this.nemo2.getW()) {
+				if(this.nemo2.getX() < this.SIZE - this.nemo2.getW()) {
+					this.nemo2.setX(this.nemo2.getX() + 1);
+				}
+				this.check = true;
 			}
 		} else if (this.dir == this.UP) {
-			if (this.nemo2.getY() + this.nemo2.getH() == this.nemo1.getY()
+			if (this.nemo2.getY() + this.nemo2.getH() >= this.nemo1.getY()
 					&& this.nemo2.getX() > this.nemo1.getX() - this.nemo1.getW()
 					&& this.nemo2.getX() < this.nemo1.getX() + this.nemo1.getW()) {
-				this.nemo2.setY(this.nemo2.getY() - 1);
+//					&& this.nemo2.getY() > 0) {
+					if(this.nemo2.getY() > 0){
+						this.nemo2.setY(this.nemo2.getY() - 1);
+					}
+				this.check = true;
 			}
+		}
+		else {
+			this.check = false;
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		this.isMoving = false;
+		this.dir = 5;
 	}
 
 	@Override

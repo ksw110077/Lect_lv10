@@ -371,12 +371,10 @@ class SnakePanel extends JPanel implements KeyListener, Runnable, ActionListener
 		int yy = temp.getY() - temp.getH();
 		int xx = temp.getX();
 		
-		for(int i = 1; i < this.snake.size(); i++) {
-			SnakeRect t = this.snake.get(i);
-			if(yy == t.getY() && xx == t.getX()) {
-				chk = true;
-				System.out.println("백은 안돼");
-			}
+		SnakeRect t = this.snake.get(1);
+		if(yy == t.getY() && xx == t.getX()) {
+			chk = true;
+			System.out.println("백은 안돼");
 		}
 		
 		return chk;
@@ -387,12 +385,10 @@ class SnakePanel extends JPanel implements KeyListener, Runnable, ActionListener
 		int yy = temp.getY();
 		int xx = temp.getX() - temp.getW();
 		
-		for(int i = 1; i < this.snake.size(); i++) {
-			SnakeRect t = this.snake.get(i);
-			if(yy == t.getY() && xx == t.getX()) {
-				chk = true;
-				System.out.println("백은 안돼");
-			}
+		SnakeRect t = this.snake.get(1);
+		if(yy == t.getY() && xx == t.getX()) {
+			chk = true;
+			System.out.println("백은 안돼");
 		}
 		
 		return chk;
@@ -403,12 +399,10 @@ class SnakePanel extends JPanel implements KeyListener, Runnable, ActionListener
 		int yy = temp.getY() + temp.getH();
 		int xx = temp.getX();
 		
-		for(int i = 1; i < this.snake.size(); i++) {
-			SnakeRect t = this.snake.get(i);
-			if(yy == t.getY() && xx == t.getX()) {
-				chk = true;
-				System.out.println("백은 안돼");
-			}
+		SnakeRect t = this.snake.get(1);
+		if(yy == t.getY() && xx == t.getX()) {
+			chk = true;
+			System.out.println("백은 안돼");
 		}
 		
 		return chk;
@@ -419,12 +413,10 @@ class SnakePanel extends JPanel implements KeyListener, Runnable, ActionListener
 		int yy = temp.getY();
 		int xx = temp.getX() + temp.getW();
 		
-		for(int i = 1; i < this.snake.size(); i++) {
-			SnakeRect t = this.snake.get(i);
-			if(yy == t.getY() && xx == t.getX()) {
-				chk = true;
-				System.out.println("백은 안돼");
-			}
+		SnakeRect t = this.snake.get(1);
+		if(yy == t.getY() && xx == t.getX()) {
+			chk = true;
+			System.out.println("백은 안돼");
 		}
 		
 		return chk;

@@ -61,9 +61,10 @@ class TestMMLRect {
 class TestMMLPanel extends JPanel implements MouseListener, MouseMotionListener{
 	
 	private TestMMLRect rect;
-	private int [] rectYx = new int [2];
-	private int [] dragYx = new int [2];
 	private boolean isMoving;
+	private int mouseY;
+	private int mouseX;
+	
 	
 	public TestMMLPanel() {
 		setLayout(null);
@@ -77,8 +78,6 @@ class TestMMLPanel extends JPanel implements MouseListener, MouseMotionListener{
 
 	private void setRect() {
 		this.rect = new TestMMLRect(225, 225, 50, 50, Color.white);
-		this.rectYx[0] = this.rect.getY();
-		this.rectYx[1] = this.rect.getX();
 	}
 
 	@Override
@@ -92,31 +91,20 @@ class TestMMLPanel extends JPanel implements MouseListener, MouseMotionListener{
 	}
 	
 	private void moving(int moveY, int moveX) {
-		if(this.isMoving) {
-			this.rectYx[0] = this.rectYx[0] + moveY;
-			this.rectYx[1] = this.rectYx[1] + moveX;
-			
-			this.rect = new TestMMLRect(this.rectYx[1], this.rectYx[0], this.rect.getW(), this.rect.getH(), this.rect.getC());
-		}
+		this.rect = new TestMMLRect(this.rect.getX() + moveX, this.rect.getY() + moveY , this.rect.getW(), this.rect.getH(), this.rect.getC());
 	}
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		
-		int y = e.getY();
-		int x = e.getX();
 		// 이동 좌표 - 이전 좌표 = 이동한 좌표 값
-		
-		int befoY = this.dragYx[0];
-		int befoX = this.dragYx[1];
-		this.dragYx[0] = y;
-		this.dragYx[1] = x;
-		
-		int moveY = y - befoY;
-		int moveX = x - befoX;
-		
-		moving(moveY, moveX);
-		
+		System.out.printf("%d : %d\n" , this.mouseY, this.mouseX);
+		int moveY = e.getY() - this.mouseY;
+		int moveX = e.getX() - this.mouseX;
+		this.mouseY = e.getY(); // 이동 좌표
+		this.mouseX = e.getX(); // 이동 좌표
+		if(this.isMoving) {
+			moving(moveY, moveX);
+		}
 	}
 
 	@Override
@@ -131,12 +119,11 @@ class TestMMLPanel extends JPanel implements MouseListener, MouseMotionListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int y = e.getY();
-		int x = e.getX();
-		if(y > this.rectYx[0] && y < this.rectYx[0] + this.rect.getH() 
-		&& x > this.rectYx[1] && x < this.rectYx[1] + this.rect.getW()) {
-			this.dragYx[0] = y;
-			this.dragYx[1] = x;
+		this.mouseY = e.getY();
+		this.mouseX = e.getX();
+		System.out.printf("%d / %d\n" , this.mouseY, this.mouseY);
+		if(this.mouseY > this.rect.getY() && this.mouseY < this.rect.getY() + this.rect.getH() 
+		&& this.mouseX > this.rect.getX() && this.mouseX < this.rect.getX() + this.rect.getW()) {
 			this.isMoving = true;
 		}
 	}

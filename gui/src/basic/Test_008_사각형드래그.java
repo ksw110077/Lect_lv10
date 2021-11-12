@@ -40,14 +40,8 @@ class TestMMLRect {
 	public int getW() {
 		return w;
 	}
-	public void setW(int w) {
-		this.w = w;
-	}
 	public int getH() {
 		return h;
-	}
-	public void setH(int h) {
-		this.h = h;
 	}
 	public Color getC() {
 		return c;
@@ -91,7 +85,9 @@ class TestMMLPanel extends JPanel implements MouseListener, MouseMotionListener{
 	}
 	
 	private void moving(int moveY, int moveX) {
-		this.rect = new TestMMLRect(this.rect.getX() + moveX, this.rect.getY() + moveY , this.rect.getW(), this.rect.getH(), this.rect.getC());
+		this.rect.setC(Color.red);
+		this.rect.setX(this.rect.getX() + moveX);
+		this.rect.setY(this.rect.getY() + moveY);
 	}
 	
 	@Override
@@ -131,6 +127,7 @@ class TestMMLPanel extends JPanel implements MouseListener, MouseMotionListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		this.isMoving = false;
+		this.rect.setC(Color.white);
 	}
 
 	@Override

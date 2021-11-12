@@ -62,8 +62,8 @@ class drawingNemo01{
 class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListener, KeyListener{
 	
 	private drawingNemo01 nemo = null;
-	private drawingNemo01 nemo2 = null;
 	private boolean isDrawing = false;
+	private boolean isShift = false;
 	private int pressY;
 	private int pressX;
 	
@@ -73,6 +73,7 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 		setBackground(Color.white);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		addKeyListener(this);
 	}
 	
 	
@@ -82,10 +83,6 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 		if(this.nemo != null) {
 			g.setColor(this.nemo.getC());
 			g.drawRect(this.nemo.getX(), this.nemo.getY(), this.nemo.getW(), this.nemo.getH());
-		}
-		if(this.nemo2 != null) {
-			g.setColor(this.nemo2.getC());
-			g.drawRect(this.nemo2.getX(), this.nemo2.getY(), this.nemo2.getW(), this.nemo2.getH());
 		}
 		repaint();
 	}
@@ -131,12 +128,6 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 		this.nemo = new drawingNemo01(this.pressX, this.pressY, gapW, gapH);
 	}
 	
-	// 0,0
-	//        -
-	//     2ㅣ1
-	// - --------- +
-	//     3ㅣ4
-	//       +
 	private void drawing(int y, int x) {
 		if(this.isDrawing) {
 			if(x >= this.pressX && y <= this.pressY) { // 1 사분면
@@ -172,8 +163,6 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -187,9 +176,10 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 		// 그림 업데이트 종료
-		this.nemo2 = this.nemo;
+		if(this.nemo != null) {
+			this.nemo.setC(Color.red);
+		}
 		this.isDrawing = false;
 	}
 
@@ -215,8 +205,9 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getKeyCode() == e.VK_SHIFT) {
+			System.out.println("쉬프트");
+		}
 	}
 
 

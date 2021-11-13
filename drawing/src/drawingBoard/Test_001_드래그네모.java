@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -62,6 +63,7 @@ class drawingNemo01{
 class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListener, KeyListener{
 	
 	private drawingNemo01 nemo = null;
+	private ArrayList<drawingNemo01> nemos = null;
 	private boolean isDrawing = false;
 	private boolean isShift = false;
 	private int pressY;
@@ -71,9 +73,10 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 		setLayout(null);
 		setBounds(0,0,1000,1000);
 		setBackground(Color.white);
+		setFocusable(true);
+		addKeyListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		addKeyListener(this);
 	}
 	
 	
@@ -83,6 +86,10 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 		if(this.nemo != null) {
 			g.setColor(this.nemo.getC());
 			g.drawRect(this.nemo.getX(), this.nemo.getY(), this.nemo.getW(), this.nemo.getH());
+		}
+		
+		if(this.nemos != null) {
+			
 		}
 		repaint();
 	}
@@ -130,17 +137,22 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 	
 	private void drawing(int y, int x) {
 		if(this.isDrawing) {
-			if(x >= this.pressX && y <= this.pressY) { // 1 사분면
-				one(y, x);
+			if(!this.isShift) {
+				if(x >= this.pressX && y <= this.pressY) { // 1 사분면
+					one(y, x);
+				}
+				else if(x <= this.pressX && y <= this.pressY) { // 2 사분면
+					two(y, x);
+				}
+				else if(x <= this.pressX && y >= this.pressY) { // 3 사분면
+					three(y, x);
+				}
+				else if(x >= this.pressX && y >= this.pressY) { // 4 사분면
+					four(y, x);
+				}
 			}
-			else if(x <= this.pressX && y <= this.pressY) { // 2 사분면
-				two(y, x);
-			}
-			else if(x <= this.pressX && y >= this.pressY) { // 3 사분면
-				three(y, x);
-			}
-			else if(x >= this.pressX && y >= this.pressY) { // 4 사분면
-				four(y, x);
+			else {
+				
 			}
 		}
 	}
@@ -179,6 +191,7 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 		// 그림 업데이트 종료
 		if(this.nemo != null) {
 			this.nemo.setC(Color.red);
+			this.nemos.add(nemo);
 		}
 		this.isDrawing = false;
 	}
@@ -198,23 +211,22 @@ class drawingJPanel01 extends JPanel implements MouseListener, MouseMotionListen
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == e.VK_SHIFT) {
-			System.out.println("쉬프트");
+			this.isShift = true;
 		}
 	}
 
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getKeyCode() == e.VK_SHIFT) {
+			this.isShift = false;
+		}
 	}
 	
 }
@@ -227,7 +239,7 @@ class drawingJFrame01 extends JFrame{
 	public drawingJFrame01() {
 		setTitle("Drawing Board");
 		setLayout(null);
-		setBounds(this.W / 2 - 500,this.H / 2 - 500,1100,1100);
+		setBounds(this.W / 2 - 800,this.H / 2 - 550,1100,1100);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		add(new drawingJPanel01());

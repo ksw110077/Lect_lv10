@@ -40,6 +40,7 @@ public class GrimBoard extends MyUtil{
 	private ArrayList<Integer> penX = new ArrayList<>();
 	private ArrayList<Integer> penY = new ArrayList<>();
 	private ArrayList<int [][]> lines = new ArrayList<>();
+	private ArrayList<Color> lineC = new ArrayList<>();
 	
 	private JLabel help = new JLabel("'ESC' Press = RESET");
 	private JLabel showShift = new JLabel("'Shift' = false");
@@ -237,7 +238,7 @@ public class GrimBoard extends MyUtil{
 			if(this.lines.get(i) != null) {
 				int x [] = this.lines.get(i)[0];
 				int y [] = this.lines.get(i)[1];
-				g.setColor(this.rect.getC());
+				g.setColor(this.lineC.get(i));
 				g.drawPolyline(x, y, x.length);
 			}
 		}
@@ -288,7 +289,7 @@ public class GrimBoard extends MyUtil{
 				rY =this.firstY - h;
 			}
 		}
-		this.rect = new GrimRect(rX, rY, w, h, Color.red);
+		this.rect = new GrimRect(rX, rY, w, h, this.backC);
 	}
 	
 	@Override
@@ -302,6 +303,7 @@ public class GrimBoard extends MyUtil{
 				this.circles.add(temp);
 			}
 			else if (this.chkForm == this.SEMO) {
+				this.triangles.add(this.rect);
 			}
 			else if (this.chkForm == this.LINE) {
 				int [] tX = new int [this.penX.size()];
@@ -313,7 +315,7 @@ public class GrimBoard extends MyUtil{
 				}
 				
 				int [][] t = {tX, tY};
-				
+				this.lineC.add(this.backC);
 				this.lines.add(t);
 				
 				this.penX = new ArrayList<>();

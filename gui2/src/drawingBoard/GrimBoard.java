@@ -24,6 +24,7 @@ public class GrimBoard extends MyUtil{
 	private final int NEMO = 0;
 	private final int CIRCLE = 1;
 	private final int SEMO = 2;
+	private final int LINE = 3;
 	
 	private int chkForm;
 	private int firstX;
@@ -35,13 +36,26 @@ public class GrimBoard extends MyUtil{
 	
 	private ArrayList<GrimRect> rects = new ArrayList<>();
 	private ArrayList<GrimRect> circles = new ArrayList<>();
-	private ArrayList<int []> triangles = new ArrayList<>();
+	private ArrayList<GrimRect> triangles = new ArrayList<>();
+	private ArrayList<Integer> penX = new ArrayList<>();
+	private ArrayList<Integer> penY = new ArrayList<>();
+	private ArrayList<int [][]> lines = new ArrayList<>();
 	
 	private JLabel help = new JLabel("'ESC' Press = RESET");
 	private JLabel showShift = new JLabel("'Shift' = false");
 	
-	String [] btnText = {"□","○","△"};
-	private JButton []  btn = new JButton[3];
+	private String [] btnText = {"□","○","△", "／"};
+	private JButton []  btn = new JButton[4];
+	
+	
+	private Color backC = Color.black;
+	private Color [] colors = {Color.black, Color.blue, Color.red, Color.yellow, Color.green};
+	private final int BLACK = 0;
+	private final int BLUE = 1;
+	private final int RED = 2;
+	private final int YELLOW = 3;
+	private final int GREEN = 4;
+	private JButton []  cBtn = new JButton[5];
 	
 	public GrimBoard() {
 		setLayout(null);
@@ -53,6 +67,7 @@ public class GrimBoard extends MyUtil{
 		setHelp();
 		setShowShift();
 		setBtn();
+		setColor();
 		
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -61,6 +76,8 @@ public class GrimBoard extends MyUtil{
 		addKeyListener(this);
 	}
 	
+
+
 	private void setShowShift() {
 		this.showShift.setBounds(800,0,155,30);
 		this.showShift.setForeground(Color.red);
@@ -77,7 +94,7 @@ public class GrimBoard extends MyUtil{
 	}
 	
 	private void setBtn() {
-		int x = 830;
+		int x = 780;
 		int y = 950;
 		
 		for(int i = 0; i < this.btn.length; i++) {
@@ -86,6 +103,20 @@ public class GrimBoard extends MyUtil{
 			this.btn[i].setText(this.btnText[i]);
 			this.btn[i].addActionListener(this);
 			add(this.btn[i]);
+			x += 53;
+		}
+	}
+	
+	private void setColor() {
+		int x = 510;
+		int y = 950;
+		
+		for(int i = 0; i < this.cBtn.length; i++) {
+			this.cBtn[i] = new JButton();
+			this.cBtn[i].setBounds(x,y, 50, 30);
+			this.cBtn[i].setBackground(this.colors[i]);
+			this.cBtn[i].addActionListener(this);
+			add(this.cBtn[i]);
 			x += 53;
 		}
 	}
@@ -103,12 +134,32 @@ public class GrimBoard extends MyUtil{
 			else if (target == this.btn[this.SEMO]) {
 				this.chkForm = this.SEMO;
 			}
+			else if (target == this.btn[this.LINE]) {
+				this.chkForm = this.LINE;
+			}
+			else if (target == this.cBtn[this.BLACK]) {
+				this.backC = this.colors[this.BLACK];
+			}
+			else if (target == this.cBtn[this.BLUE]) {
+				this.backC = this.colors[this.BLUE];
+			}
+			else if (target == this.cBtn[this.RED]) {
+				this.backC = this.colors[this.RED];
+			}
+			else if (target == this.cBtn[this.YELLOW]) {
+				this.backC = this.colors[this.YELLOW];
+			}
+			else if (target == this.cBtn[this.GREEN]) {
+				this.backC = this.colors[this.GREEN];
+			}
 		}
 	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		int xx [] = new int [3];
+		int yy [] = new int [3];
 		if(this.rect != null) {
 			g.setColor(this.rect.getC());
 			if(this.chkForm == this.NEMO) {
@@ -118,7 +169,28 @@ public class GrimBoard extends MyUtil{
 				g.drawRoundRect(this.rect.getX(), this.rect.getY(), this.rect.getW(), this.rect.getH(), this.rect.getW(), this.rect.getH());
 			}
 			else if(this.chkForm == this.SEMO) {
-				g.drawPolygon(this.triX, this.triY, 3);
+				xx = new int[3];
+				yy = new int[3];
+				xx[0] = this.rect.getX();
+				yy[0] = this.rect.getY();
+				
+				xx[1] = this.rect.getX() - this.rect.getW() / 2;
+				yy[1] = this.rect.getY() + this.rect.getH();
+				
+				xx[2] = this.rect.getX() + this.rect.getW() / 2;
+				yy[2] = this.rect.getY() + this.rect.getH();
+				
+				g.drawPolygon(xx, yy, 3);
+			}
+			else if (this.chkForm == this.LINE) {
+				int [] tX = new int [this.penX.size()];
+				int [] tY = new int [this.penY.size()];
+				
+				for(int i = 0; i < this.penX.size(); i++) {
+					tX[i] = this.penX.get(i);
+					tY[i] = this.penY.get(i);
+				}
+				g.drawPolyline(tX, tY, this.penX.size());
 			}
 		}
 		
@@ -143,12 +215,30 @@ public class GrimBoard extends MyUtil{
 		}
 		
 		// triangle
-		for(int i = 0; i < this.triangles.size(); i += 2) {
-			if(this.triangles.get(i) != null) {
-				int x [] = this.triangles.get(i);
-				int y [] = this.triangles.get(i + 1);
-				g.setColor(Color.blue);
-				g.drawPolygon(x, y, 3);
+		for(int i =0; i < this.triangles.size(); i++) {
+			GrimRect r = this.triangles.get(i);
+			xx = new int[3];
+			yy = new int[3];
+			xx[0] = r.getX();
+			yy[0] = r.getY();
+			
+			xx[1] = r.getX() - r.getW() / 2;
+			yy[1] = r.getY() + r.getH();
+			
+			xx[2] = r.getX() + r.getW() / 2;
+			yy[2] = r.getY() + r.getH();
+			
+			g.setColor(r.getC());
+			g.drawPolygon(xx, yy, 3);
+		}
+		
+		// line
+		for(int i = 0; i < this.lines.size(); i ++) {
+			if(this.lines.get(i) != null) {
+				int x [] = this.lines.get(i)[0];
+				int y [] = this.lines.get(i)[1];
+				g.setColor(this.rect.getC());
+				g.drawPolyline(x, y, x.length);
 			}
 		}
 		
@@ -160,8 +250,9 @@ public class GrimBoard extends MyUtil{
 	public void mousePressed(MouseEvent e) { // 첫 좌표 받기
 		this.firstX = e.getX();
 		this.firstY = e.getY();
-		this.triX[0] = this.firstX;
-		this.triY[0] = this.firstY;
+		
+		this.penX.add(this.firstX);
+		this.penY.add(this.firstY);
 	}
 	
 	@Override
@@ -169,44 +260,41 @@ public class GrimBoard extends MyUtil{
 		// 현재 마우스 좌표
 		int x = e.getX();
 		int y = e.getY();
+		
+		this.penX.add(x);
+		this.penY.add(y);
+		
 		// 프레임 or 패널 위에서의 좌표는 무조건 0과 양수 값
 		// 기준값 - 이동값 또는 이동값 - 기준값 해도
 		// 절대값 처리하면 거리값으로 구해질 수 있음
 		
 		// 절대값 메소드 Math.abs();
-		int w = Math.abs(x - this.firstX);
-		int h = Math.abs(y - this.firstY);
+		int w = this.chkForm == this.SEMO ? x - this.firstX : Math.abs(x - this.firstX);
+		int h = this.chkForm == this.SEMO ? y - this.firstY : Math.abs(y - this.firstY);
+		
 		if(this.shift) {
-			h = w;
-		}
-		
-		this.triX[1] = this.firstX - (w / 2);
-		this.triX[2] = this.firstX + (w / 2);
-		
-		int paintingX = this.firstX;
-		int paintingY = this.firstY;
-		
-		if(x < this.firstX) {
-			paintingX = this.firstX - w;
-		}
-		if(y < this.firstY) {
-			paintingY = this.firstY - h;
-			this.triY[1] = this.firstY - h;
-			this.triY[2] = this.firstY - h;
-		}
-		else {
-			this.triY[1] = this.firstY + h;
-			this.triY[2] = this.firstY + h;
+			w = h;
 		}
 		
 		
-		this.rect = new GrimRect(paintingX, paintingY, w, h, Color.black);
+		int rX = this.firstX;
+		int rY = this.firstY;
+		
+		if (this.chkForm != this.SEMO) {
+			if(x < this.firstX) {
+				rX = this.firstX - w;
+			}
+			if(y < this.firstY) {
+				rY =this.firstY - h;
+			}
+		}
+		this.rect = new GrimRect(rX, rY, w, h, Color.red);
 	}
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if(this.rect != null) {
-			GrimRect temp = new GrimRect(this.rect.getX(), this.rect.getY(), this.rect.getW(), this.rect.getH(), Color.blue);
+			GrimRect temp = new GrimRect(this.rect.getX(), this.rect.getY(), this.rect.getW(), this.rect.getH(), this.rect.getC());
 			if(this.chkForm == this.NEMO) {
 				this.rects.add(temp);
 			}
@@ -214,15 +302,22 @@ public class GrimBoard extends MyUtil{
 				this.circles.add(temp);
 			}
 			else if (this.chkForm == this.SEMO) {
-				int [] tempX = new int [3];
-				int [] tempY = new int [3];
+			}
+			else if (this.chkForm == this.LINE) {
+				int [] tX = new int [this.penX.size()];
+				int [] tY = new int [this.penY.size()];
 				
-				for(int i = 0 ; i < this.triX.length; i++) {
-					tempX[i] = this.triX[i];
-					tempY[i] = this.triY[i];
+				for(int i = 0; i < this.penX.size(); i++) {
+					tX[i] = this.penX.get(i);
+					tY[i] = this.penY.get(i);
 				}
-				this.triangles.add(tempX);
-				this.triangles.add(tempY);
+				
+				int [][] t = {tX, tY};
+				
+				this.lines.add(t);
+				
+				this.penX = new ArrayList<>();
+				this.penY = new ArrayList<>();
 			}
 			this.rect = null;
 		}
@@ -249,6 +344,7 @@ public class GrimBoard extends MyUtil{
 			this.rects = new ArrayList<>();
 			this.circles = new ArrayList<>();
 			this.triangles = new ArrayList<>();
+			this.lines = new ArrayList<>();
 		}
 	}
 }

@@ -12,6 +12,7 @@ import javax.swing.JButton;
 public class GrimBoard extends MyUtil{
 	private ArrayList<GrimRect> rects = new ArrayList<>();
 	private ArrayList<GrimRect> circles = new ArrayList<>();
+	private ArrayList<GrimRect> triangles = new ArrayList<>();
 	
 	private GrimRect rect = null;
 	private int startX, startY;
@@ -65,14 +66,14 @@ public class GrimBoard extends MyUtil{
 		// 3. 좌표 개수 (꼭지점 개수)
 		int [] xx = new int[3];
 		int [] yy = new int[3];
-		xx[0] = 100;
-		yy[0] = 100;
-		xx[1] = 150;
-		yy[1] = 200;
-		xx[2] = 50;
-		yy[2] = 200;
-		g.setColor(Color.GREEN);
-		g.drawPolygon(xx, yy, 3);
+//		xx[0] = 100;
+//		yy[0] = 100;
+//		xx[1] = 150;
+//		yy[1] = 200;
+//		xx[2] = 50;
+//		yy[2] = 200;
+//		g.setColor(Color.GREEN);
+//		g.drawPolygon(xx, yy, 3);
 		
 		// this.rect : 임시 객체 - > 타입에 따라 다르게
 		if(this.rect != null) {
@@ -85,7 +86,20 @@ public class GrimBoard extends MyUtil{
 				g.drawRoundRect(this.rect.getX(), this.rect.getY(), this.rect.getW(), this.rect.getH(), this.rect.getW(), this.rect.getH());
 			}
 			else if (this.type == this.TRIANGLE) {
+				// this.rect 기준으로 -> 삼각형을 그릴 좌표배열 만들기
 				
+				xx = new int[3];
+				yy = new int[3];
+				xx[0] = this.rect.getX();
+				yy[0] = this.rect.getY();
+				
+				xx[1] = this.rect.getX() - this.rect.getW() / 2;
+				yy[1] = this.rect.getY() + this.rect.getH();
+				
+				xx[2] = this.rect.getX() + this.rect.getW() / 2;
+				yy[2] = this.rect.getY() + this.rect.getH();
+				
+				g.drawPolygon(xx, yy, 3);
 			}
 		}
 		
@@ -102,6 +116,26 @@ public class GrimBoard extends MyUtil{
 			GrimRect r = this.circles.get(i);
 			g.setColor(r.getC());
 			g.drawRoundRect(r.getX(), r.getY(), r.getW(), r.getH(), r.getW(), r.getH());
+		}
+		
+		
+		// triangles
+		
+		for(int i =0; i < this.triangles.size(); i++) {
+			GrimRect r = this.triangles.get(i);
+			xx = new int[3];
+			yy = new int[3];
+			xx[0] = r.getX();
+			yy[0] = r.getY();
+			
+			xx[1] = r.getX() - r.getW() / 2;
+			yy[1] = r.getY() + r.getH();
+			
+			xx[2] = r.getX() + r.getW() / 2;
+			yy[2] = r.getY() + r.getH();
+			
+			g.setColor(r.getC());
+			g.drawPolygon(xx, yy, 3);
 		}
 		
 		requestFocusInWindow();
@@ -139,6 +173,7 @@ public class GrimBoard extends MyUtil{
 			this.circles.add(this.rect);
 		}
 		else if (this.type == this.TRIANGLE) {
+			this.triangles.add(this.rect);
 		}
 		this.rect = null;
 	}
@@ -149,8 +184,8 @@ public class GrimBoard extends MyUtil{
 		int y = e.getY();
 		
 		// 절대값 구하는 메소드  Math.abs
-		int w = Math.abs(x - this.startX);
-		int h = Math.abs(y - this.startY);
+		int w = this.type == this.TRIANGLE ? x - this.startX : Math.abs(x - this.startX);
+		int h = this.type == this.TRIANGLE ? y - this.startY : Math.abs(y - this.startY);
 		
 		if(this.shift) {
 			w = h;
@@ -160,11 +195,13 @@ public class GrimBoard extends MyUtil{
 		int rX = this.startX;
 		int rY = this.startY;
 		
-		if(x < this.startX) {
-			rX = this.startX - w;
-		}
-		if(y < this.startY) {
-			rY =this.startY - h;
+		if (this.type != this.TRIANGLE) {
+			if(x < this.startX) {
+				rX = this.startX - w;
+			}
+			if(y < this.startY) {
+				rY =this.startY - h;
+			}
 		}
 		this.rect = new GrimRect(rX, rY, w, h, Color.red);
 	}

@@ -124,6 +124,9 @@ public class HorsePanel extends MyUtil{
 		
 		// reset Rank
 		this.rank = 0;
+		
+		// reset ms
+		this.ms = 0;
 	}
 
 

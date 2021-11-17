@@ -12,13 +12,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 public class HorsePanel extends MyUtil{
+	private final int SIZE = 5;
+	private final int ENDX = 1350;
+
 	private JButton startAndReset = null;
 	private JLabel timer = null;
-
-	private final int SIZE = 5;
-	private Horse[] horses = new Horse[this.SIZE];
-	private JLabel [] ho = new JLabel[this.SIZE];
 	private JLabel [] record = new JLabel[this.SIZE];
+
+	private Horse[] horses = new Horse[this.SIZE];
 	
 	private boolean start = false;
 	private int ms = 0;
@@ -38,11 +39,8 @@ public class HorsePanel extends MyUtil{
 		// 120 + 130
 		int x = 10;
 		int y = 120;
-		for(int i = 0; i < this.horses.length; i++) {
+		for(int i = 0; i < this.SIZE; i++) {
 			this.horses[i] = new Horse(i + 1, x, y, 100,100);
-			this.ho[i] = new JLabel(this.horses[i].getImage());
-			this.ho[i].setBounds(x,y,100,100);
-			add(this.ho[i]);
 			y += 130;
 		}
 	}
@@ -74,9 +72,14 @@ public class HorsePanel extends MyUtil{
 		int xE = 1450;
 		int y = 220;
 		
-		for(int i =0; i < 5; i++) {
+//		if(this.start) {
+//			runHorses();
+//		}
+		
+		for(int i =0; i < this.SIZE; i++) {
 			g.setColor(Color.black);
 			g.drawLine(xS, y, xE, y);
+			g.drawImage(this.horses[i].getImage().getImage(), this.horses[i].getX(), this.horses[i].getY(), null);
 			y += 130;
 		}
 		repaint();
@@ -89,20 +92,17 @@ public class HorsePanel extends MyUtil{
 			if(target == this.startAndReset) {
 				this.start = this.start == false ? true : false;
 				updateBtn();
-				runHorses();
 			}
 		}
 	}
 
 
 	private void updateBtn() {
-		// 말 1350 도착 시 종료
 		if(this.start) {
 			this.startAndReset.setText("RESET");
 		}
 		else {
 			this.startAndReset.setText("START");
-			// reset
 			reset();
 		}
 	}
@@ -113,7 +113,6 @@ public class HorsePanel extends MyUtil{
 		int y = 120;
 		for(int i = 0; i < this.horses.length; i++) {
 			this.horses[i] = new Horse(i + 1, x, y, 100,100);
-			this.ho[i].setBounds(x,y,100,100);
 			if(this.record[i] != null) {
 				this.record[i].setText("");
 			}
@@ -141,23 +140,13 @@ public class HorsePanel extends MyUtil{
 			
 			if(r == 1 && this.horses[i].getState() == this.horses[i].RUN) {
 				this.horses[i].setX(this.horses[i].getX() + 1);
-				this.ho[i].setBounds(this.horses[i].getX(), this.ho[i].getY(), this.ho[i].getWidth(), this.ho[i].getHeight());
-				
-				if(this.horses[i].getX() == 1350) {
+				if(this.horses[i].getX() == this.ENDX) {
 					if(chk == 0) {
 						this.rank ++;
 						this.horses[i].setState(this.horses[i].GOAL);
 						this.horses[i].setRank(this.rank);
 						this.horses[i].setRecord(String.format("%3d.%3d", this.ms / 1000, this.ms % 1000));
-						if(this.record[i] == null) {
-							this.record[i] = new JLabel(String.format("%d 등 : %5d.%3d초", this.horses[i].getRank(), this.ms / 1000, this.ms % 1000));
-							this.record[i].setBounds(this.horses[i].getX() - 100, this.horses[i].getY(), 100,100);
-							add(this.record[i]);
-						}
-						else {
-							this.record[i].setText(String.format("%d 등 : %5d.%3d초", this.horses[i].getRank(), this.ms / 1000, this.ms % 1000));
-							this.record[i].setBounds(this.horses[i].getX() - 100, this.horses[i].getY(), 100,100);
-						}
+						rankLabel(i);
 						chk ++;
 					}
 					else {
@@ -167,12 +156,23 @@ public class HorsePanel extends MyUtil{
 			}
 		}
 	}
+	
+	private void rankLabel(int i) {
+		if(this.record[i] == null) {
+			this.record[i] = new JLabel(this.horses[i].getRank() + "등 : " + this.horses[i].getRecord());
+			this.record[i].setBounds(this.horses[i].getX() - 100, this.horses[i].getY(), 100,100);
+			add(this.record[i]);
+		}
+		else{
+			this.record[i].setText(this.horses[i].getRank() + "등 : " + this.horses[i].getRecord());
+		}
+	}
 
 
 	@Override
 	public void run() {
 		while(true) {
-			if(this.start && this.rank != 5) {
+			if(this.start && this.rank != this.SIZE) {
 				this.ms += 1;
 				this.timer.setText(String.format("%3d.%3d", this.ms / 1000, this.ms % 1000 ));
 				runHorses();

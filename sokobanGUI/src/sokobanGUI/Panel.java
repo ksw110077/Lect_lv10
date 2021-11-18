@@ -30,7 +30,7 @@ public class Panel extends Util {
 	private final int W = 30;
 	private final int H = 30;
 
-	private final int MAXLV = 2;
+	private final int MAXLV = 3;
 	private final int StartX = 10;
 	private final int StartY = 40;
 

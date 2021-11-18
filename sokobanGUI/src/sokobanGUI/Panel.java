@@ -26,14 +26,14 @@ public class Panel extends Util {
 	public final int GOAL = 5;
 	public final int NOBOX = 6;
 	public final int YESBOX = 7;
-	
+
 	private final int W = 30;
 	private final int H = 30;
 
 	private final int MAXLV = 2;
 	private final int StartX = 10;
 	private final int StartY = 40;
-	
+
 	private ArrayList<ArrayList<Tile>> map = new ArrayList<>();
 
 	private boolean end = false;
@@ -69,7 +69,7 @@ public class Panel extends Util {
 		System.out.println("this.alert : " + this.alert);
 		System.out.println("==========================");
 	}
-	
+
 	public Panel() {
 		setLayout(null);
 		setBounds(0, 0, 900, 950); // 위 10픽셀 레벨 선택창
@@ -105,7 +105,7 @@ public class Panel extends Util {
 		this.levelsBox = new JComboBox<String>(this.strLV);
 		this.levelsBox.setBounds(80, 10, 70, 20);
 		this.levelsBox.addActionListener(this);
-		add(this.levelsBox , 0);
+		add(this.levelsBox, 0);
 	}
 
 	private void setBtn() {
@@ -129,7 +129,7 @@ public class Panel extends Util {
 		this.cntGoal = 0;
 		this.cntFinish = 0;
 		this.dir = 0;
-		
+
 		if (this.file.exists()) {
 			FileReader fr = null;
 			BufferedReader br = null;
@@ -137,7 +137,7 @@ public class Panel extends Util {
 				this.map = new ArrayList<>();
 				fr = new FileReader(this.file);
 				br = new BufferedReader(fr);
-				
+
 				int x = this.StartX;
 				int y = this.StartY;
 				int state = 0;
@@ -159,23 +159,21 @@ public class Panel extends Util {
 							state = this.PLAYER;
 							this.pIdxY = this.map.size();
 							this.pIdxX = i;
-						} 
-						else if (tile[i].equals("" + this.PTAGER)) {
+						} else if (tile[i].equals("" + this.PTAGER)) {
 							state = this.PTAGER;
 							goal = true;
-							this.cntGoal ++;
-						}
-						else if (tile[i].equals("" + this.NOBOX)) {
+							this.cntGoal++;
+						} else if (tile[i].equals("" + this.NOBOX)) {
 							state = this.NOBOX;
 						} else if (tile[i].equals("" + this.GOAL)) {
 							state = this.GOAL;
 							goal = true;
-							this.cntGoal ++;
+							this.cntGoal++;
 						} else if (tile[i].equals("" + this.YESBOX)) {
 							state = this.YESBOX;
 							goal = true;
 							this.cntFinish++;
-							this.cntGoal ++;
+							this.cntGoal++;
 						}
 						Tile tic = new Tile(x, y, state, goal);
 						tileLine.add(tic);
@@ -201,18 +199,18 @@ public class Panel extends Util {
 				g.drawImage(m.getImage().getImage(), m.getX(), m.getY(), null);
 			}
 		}
-		if(this.alert != null && this.alert.getChkClose() && this.lv < this.MAXLV) {
+		if (this.alert != null && this.alert.getChkClose() && this.lv < this.MAXLV) {
 			levelUp();
 		}
 		repaint();
 	}
 
 	private void levelUp() {
-		this.lv ++;
+		this.lv++;
 		this.textLV.setText("Level " + this.lv);
 		reset();
 	}
-	
+
 	private void reset() {
 		this.dir = 0;
 		setMap();
@@ -220,7 +218,7 @@ public class Panel extends Util {
 		this.alert = null;
 		requestFocusInWindow();
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JComboBox) {
@@ -254,13 +252,14 @@ public class Panel extends Util {
 				xx++;
 			}
 
+			Tile yx = this.map.get(yy).get(xx);
+
 			if (yy < 0 || yy >= this.map.size() || xx < 0 || xx >= this.map.get(0).size()
-					|| this.map.get(yy).get(xx).getState() == this.WALL) {
+					|| yx.getState() == this.WALL) {
 				return;
 			} // 이동한 곳이 범위 밖이거나 벽일 때 리턴
 
-			if (this.map.get(yy).get(xx).getState() == this.NOBOX
-					|| this.map.get(yy).get(xx).getState() == this.YESBOX) {
+			if (yx.getState() == this.NOBOX || yx.getState() == this.YESBOX) {
 				int bX = xx;
 				int bY = yy;
 
@@ -274,70 +273,73 @@ public class Panel extends Util {
 					bX++;
 				}
 
+				Tile bYX = this.map.get(bY).get(bX);
+
 				if (bY < 0 || bY >= this.map.size() || bX < 0 || bX >= this.map.get(0).size()
-						|| this.map.get(bY).get(bX).getState() == this.WALL
-						|| this.map.get(bY).get(bX).getState() == this.NOBOX
-						|| this.map.get(bY).get(bX).getState() == this.YESBOX) {
+						|| bYX.getState() == this.WALL || bYX.getState() == this.NOBOX
+						|| bYX.getState() == this.YESBOX) {
 					return;
 				}
 
-				if (this.map.get(bY).get(bX).getGoal()) {
-					this.map.get(bY).get(bX).setState(this.YESBOX);
+				if (bYX.getGoal()) {
+					bYX.setState(this.YESBOX);
 					String n = "images/tile" + this.YESBOX + ".png";
-					this.map.get(bY).get(bX).setImage(new ImageIcon(
+					bYX.setImage(new ImageIcon(
 							new ImageIcon(n).getImage().getScaledInstance(this.W, this.H, Image.SCALE_SMOOTH)));
 				} else {
-					this.map.get(bY).get(bX).setState(this.NOBOX);
+					bYX.setState(this.NOBOX);
 					String n = "images/tile" + this.NOBOX + ".png";
-					this.map.get(bY).get(bX).setImage(new ImageIcon(
+					bYX.setImage(new ImageIcon(
 							new ImageIcon(n).getImage().getScaledInstance(this.W, this.H, Image.SCALE_SMOOTH)));
 				}
 			}
 
-			if (this.map.get(this.pIdxY).get(this.pIdxX).getGoal()) {
-				this.map.get(this.pIdxY).get(this.pIdxX).setState(this.GOAL);
+			Tile pYX = this.map.get(this.pIdxY).get(this.pIdxX);
+
+			if (pYX.getGoal()) {
+				pYX.setState(this.GOAL);
 				String n = "images/tile" + this.GOAL + ".png";
-				this.map.get(this.pIdxY).get(this.pIdxX).setImage(new ImageIcon(
+				pYX.setImage(new ImageIcon(
 						new ImageIcon(n).getImage().getScaledInstance(this.W, this.H, Image.SCALE_SMOOTH)));
 			} else {
-				this.map.get(this.pIdxY).get(this.pIdxX).setState(this.GROUND);
+				pYX.setState(this.GROUND);
 				String n = "images/tile" + this.GROUND + ".png";
-				this.map.get(this.pIdxY).get(this.pIdxX).setImage(new ImageIcon(
+				pYX.setImage(new ImageIcon(
 						new ImageIcon(n).getImage().getScaledInstance(this.W, this.H, Image.SCALE_SMOOTH)));
 			}
 
 			this.pIdxX = xx;
 			this.pIdxY = yy;
-			
-			if(this.map.get(this.pIdxY).get(this.pIdxX).getGoal()) {
-				this.map.get(this.pIdxY).get(this.pIdxX).setState(this.PTAGER);
+
+			pYX = this.map.get(this.pIdxY).get(this.pIdxX);
+
+			if (pYX.getGoal()) {
+				pYX.setState(this.PTAGER);
 				String n = "images/tile" + this.PTAGER + ".png";
-				this.map.get(this.pIdxY).get(this.pIdxX).setImage(
-						new ImageIcon(new ImageIcon(n).getImage().getScaledInstance(this.W, this.H, Image.SCALE_SMOOTH)));
-			}
-			else {
-				this.map.get(this.pIdxY).get(this.pIdxX).setState(this.PLAYER);
+				pYX.setImage(new ImageIcon(
+						new ImageIcon(n).getImage().getScaledInstance(this.W, this.H, Image.SCALE_SMOOTH)));
+			} else {
+				pYX.setState(this.PLAYER);
 				String n = "images/tile" + this.PLAYER + ".png";
-				this.map.get(this.pIdxY).get(this.pIdxX).setImage(
-						new ImageIcon(new ImageIcon(n).getImage().getScaledInstance(this.W, this.H, Image.SCALE_SMOOTH)));
+				pYX.setImage(new ImageIcon(
+						new ImageIcon(n).getImage().getScaledInstance(this.W, this.H, Image.SCALE_SMOOTH)));
 			}
 		}
 	}
-	
 
 	private void winChk() {
 		this.cntFinish = 0;
-		for(int i = 0; i < this.map.size(); i++) {
+		for (int i = 0; i < this.map.size(); i++) {
 			ArrayList<Tile> line = this.map.get(i);
-			for(int j = 0; j < line.size(); j++) {
+			for (int j = 0; j < line.size(); j++) {
 				Tile t = line.get(j);
-				if(t.getState() == this.YESBOX) {
-					this.cntFinish ++;
+				if (t.getState() == this.YESBOX) {
+					this.cntFinish++;
 				}
 			}
 		}
-		
-		if(this.cntFinish == this.cntGoal) {
+
+		if (this.cntFinish == this.cntGoal) {
 			this.end = true;
 			this.alert = new Alert();
 		}
@@ -348,17 +350,13 @@ public class Panel extends Util {
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == e.VK_SPACE) {
 			reset();
-		}
-		else if (e.getKeyCode() == e.VK_UP) {
+		} else if (e.getKeyCode() == e.VK_UP) {
 			this.dir = 1;
-		}
-		else if (e.getKeyCode() == e.VK_LEFT) {
+		} else if (e.getKeyCode() == e.VK_LEFT) {
 			this.dir = 2;
-		}
-		else if (e.getKeyCode() == e.VK_DOWN) {
+		} else if (e.getKeyCode() == e.VK_DOWN) {
 			this.dir = 3;
-		}
-		else if (e.getKeyCode() == e.VK_RIGHT) {
+		} else if (e.getKeyCode() == e.VK_RIGHT) {
 			this.dir = 4;
 		}
 		move();

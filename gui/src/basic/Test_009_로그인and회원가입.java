@@ -121,11 +121,11 @@ class LogJoinUM {
 	}
 }
 
-class successJoin extends MyFrameUtil{
-	public successJoin() {
+class SuccessJoin extends MyFrameUtil{
+	public SuccessJoin() {
 		setTitle("회원가입완료");
 		setLayout(null);
-		setBounds(100,100,514,337);
+		setBounds(300,300,414,137);
 		addWindowListener(this);
 		
 		setLabel();
@@ -136,7 +136,7 @@ class successJoin extends MyFrameUtil{
 	private void setLabel() {
 		JLabel a = new JLabel();
 		a.setText("가입을 축하드립니다.");
-		a.setBounds(0,0,500,300);
+		a.setBounds(0,0,400,100);
 		a.setHorizontalAlignment(JLabel.CENTER);
 		a.setVerticalAlignment(JLabel.CENTER);
 		add(a);
@@ -148,11 +148,11 @@ class successJoin extends MyFrameUtil{
 	}
 }
 
-class failJoin extends MyFrameUtil{
-	public failJoin() {
+class FailJoin extends MyFrameUtil{
+	public FailJoin() {
 		setTitle("회원가입 실패");
 		setLayout(null);
-		setBounds(100,100,214,137);
+		setBounds(300,300,414,137);
 		addWindowListener(this);
 		
 		setLabel();
@@ -162,13 +162,39 @@ class failJoin extends MyFrameUtil{
 	
 	private void setLabel() {
 		JLabel a = new JLabel();
-		a.setText("중복된 아이디 입니다.");
-		a.setBounds(0,0,200,100);
+		a.setText("가입 정보를 확인하세요.");
+		a.setBounds(0,0,400,100);
 		a.setHorizontalAlignment(JLabel.CENTER);
 		a.setVerticalAlignment(JLabel.CENTER);
 		add(a);
 	}
 
+	@Override
+	public void windowClosing(WindowEvent e) {
+		dispose();
+	}
+}
+class FailLogin extends MyFrameUtil{
+	public FailLogin() {
+		setTitle("로그인 실패");
+		setLayout(null);
+		setBounds(300,300,414,137);
+		addWindowListener(this);
+		
+		setLabel();
+		setVisible(true);
+		revalidate();
+	}
+	
+	private void setLabel() {
+		JLabel a = new JLabel();
+		a.setText("회원 정보를 확인하세요.");
+		a.setBounds(0,0,400,100);
+		a.setHorizontalAlignment(JLabel.CENTER);
+		a.setVerticalAlignment(JLabel.CENTER);
+		add(a);
+	}
+	
 	@Override
 	public void windowClosing(WindowEvent e) {
 		dispose();
@@ -184,7 +210,7 @@ class JoinPopup extends MyFrameUtil{
 	
 	public JoinPopup() {
 		setLayout(null);
-		setBounds(100,100,514,337);
+		setBounds(300,300,514,337);
 		addWindowListener(this);
 		setbtn();
 		setLabel();
@@ -240,37 +266,42 @@ class JoinPopup extends MyFrameUtil{
 
 
 	private void chkOverlap() {
-		String id = this.jf[0].getText();
-		String pw = this.jf[1].getText();
-		String name = this.jf[2].getText();
-		
-		boolean overlap = false;
-		
-		for(int i = 0 ; i < this.um.getData().size(); i++) {
-			Vector<String> user = this.um.getData().get(i);
-			String saveId = user.get(0);
+		if(!this.jf[0].getText().equals("") && !this.jf[1].getText().equals("") && !this.jf[2].getText().equals("")) {
+			String id = this.jf[0].getText();
+			String pw = this.jf[1].getText();
+			String name = this.jf[2].getText();
 			
-			if(saveId.equals(id)) {
-				overlap = true;
+			boolean overlap = false;
+			
+			for(int i = 0 ; i < this.um.getData().size(); i++) {
+				Vector<String> user = this.um.getData().get(i);
+				String saveId = user.get(0);
+				
+				if(saveId.equals(id)) {
+					overlap = true;
+				}
 			}
- 		}
-		
-		if(!overlap) {
-			Vector<String> user = new Vector<>();
 			
-			user.add(id);
-			user.add(pw);
-			user.add(name);
-			
-			this.um.getData().add(user);
-			this.um.save();
-			
-			dispose();
-			
-			new successJoin();
+			if(!overlap) {
+				Vector<String> user = new Vector<>();
+				
+				user.add(id);
+				user.add(pw);
+				user.add(name);
+				
+				this.um.getData().add(user);
+				this.um.save();
+				
+				dispose();
+				
+				new SuccessJoin();
+			}
+			else {
+				new FailJoin();
+			}
 		}
-		else {
-			new failJoin();
+		else if(this.jf[0].getText().equals("") || this.jf[1].getText().equals("") || this.jf[2].getText().equals("")) {
+			new FailJoin();
 		}
 	}
 
@@ -290,7 +321,7 @@ class loginPopup extends MyFrameUtil{
 	public loginPopup() {
 		setTitle("로그인");
 		setLayout(null);
-		setBounds(100,100,514,337);
+		setBounds(300,300,514,337);
 		addWindowListener(this);
 		setbtn();
 		setLabel();
@@ -343,25 +374,37 @@ class loginPopup extends MyFrameUtil{
 	}
 
 	private void chklogin() {
-		String id = this.jf[0].getText();
-		String pw = this.jf[1].getText();
-		
-		for(int i = 0 ; i < this.um.getData().size(); i++) {
-			Vector<String> user = this.um.getData().get(i);
-			// id
-			// pw
-			// name 순 저장
+		if(!this.jf[0].getText().equals("") && !this.jf[1].getText().equals("")) {
+			String id = this.jf[0].getText();
+			String pw = this.jf[1].getText();
 			
-			String saveId = user.get(0);
-			String savePw = user.get(1);
+			boolean chk = false;
 			
-			if(id.equals(saveId) && pw.equals(savePw)) {
-				System.out.print(user.get(2) + " ");
-				System.out.println("로그인 성공");
-				this.um.setLog(i);
-				dispose();
+			for(int i = 0 ; i < this.um.getData().size(); i++) {
+				Vector<String> user = this.um.getData().get(i);
+				// id
+				// pw
+				// name 순 저장
+				
+				String saveId = user.get(0);
+				String savePw = user.get(1);
+				
+				if(id.equals(saveId) && pw.equals(savePw)) {
+					System.out.print(user.get(2) + " ");
+					System.out.println("로그인 성공");
+					this.um.setLog(i);
+					dispose();
+					chk = true;
+					break;
+				}
 			}
- 		}
+			if(!chk){
+				new FailLogin();
+			}
+		}
+		else if(this.jf[0].getText().equals("") || this.jf[1].getText().equals("")) {
+			new FailLogin();
+		}
 	}
 
 	@Override
@@ -448,7 +491,7 @@ class logJoinPanel extends MyUtil{
 public class Test_009_로그인and회원가입 extends JFrame {
 	public Test_009_로그인and회원가입() {
 		setLayout(null);
-		setBounds(100,100,514,337);
+		setBounds(300,300,514,337);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		add(new logJoinPanel());

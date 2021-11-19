@@ -66,7 +66,7 @@ public class Panel extends Util {
 		System.out.println("this.dir : " + this.dir);
 		System.out.println("this.lv : " + this.lv);
 		System.out.println("this.boxIdx : " + this.boxIdx);
-		System.out.println("this.alert : " + this.alert);
+		System.out.println("this.alert : " + this.alert); // 렙업 때만?
 		System.out.println("==========================");
 	}
 
@@ -126,6 +126,8 @@ public class Panel extends Util {
 
 	public void setMap() {
 		this.file = new File("mapData/" + this.textLV.getText() + ".txt");
+		// 파일 내 주석 처리 안됨
+		
 		this.cntGoal = 0;
 		this.cntFinish = 0;
 		this.dir = 0;

@@ -1,4 +1,4 @@
-package grimpan;
+package basic;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

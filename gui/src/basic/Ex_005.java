@@ -145,6 +145,8 @@ class ExPanel extends JPanel implements KeyListener, ActionListener{
 		js.setBounds(50,50,300,300);
 		js.setAutoscrolls(true); // default true
 		add(js);
+		
+		// 스크롤에서 값 수정하면 vector 값 변경
 	}
 
 	private void setButton() {
@@ -213,6 +215,11 @@ class ExPanel extends JPanel implements KeyListener, ActionListener{
 			this.table.revalidate();
 			this.table.repaint();
 			
+			System.out.println("0인덱스 유저 정보");
+			System.out.println(this.users.get(0));
+			System.out.println(this.users.get(1));
+			System.out.println(this.users.get(2));
+			
 			this.joinFrame.dispose(); // 프레임에 대한 창 닫기
 		}
 		else {
@@ -262,7 +269,15 @@ public class Ex_005 extends JFrame {
 		setBounds(100,100,400,500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
+		
+		// JFrame 에는 Pane
+		// this.getContentPane() -> 교체 this.setContentPane()
+		
+		
+		// 아래 두줄 동일
+		this.getContentPane().add(new ExPanel());
 		add(new ExPanel());
+		
 		
 		setVisible(true);
 		revalidate();

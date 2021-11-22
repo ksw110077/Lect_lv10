@@ -426,8 +426,8 @@ class logJoinPanel extends MyUtil{
 	
 	private JLabel logId = new JLabel();
 	
-	private Vector<String> colName = null;
 	private JTable jt = null;
+	private Vector<String> colName = null;
 	
 	// 50 부터
 	

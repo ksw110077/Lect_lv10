@@ -1,9 +1,11 @@
 package basic;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -11,8 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 class JoinFrame extends JFrame{
 	
@@ -38,7 +44,6 @@ class JoinFrame extends JFrame{
 	}
 
 	private void setTextField() {
-		
 		this.idLabel.setBounds(30,50,60,50);
 		add(this.idLabel);
 		this.idField.setBounds(90,50,150,50);
@@ -74,6 +79,8 @@ class ExPanel extends JPanel implements KeyListener, ActionListener{
 	// ㄴ 회원가입 정보는 Vector에 저장
 	
 	Vector<Vector<String>> users = new Vector<>();
+
+	Vector<String> colName = null;
 	// User : Vector<String>
 	// ㄴ add(id) : 중복예외처리
 	// ㄴ add(pw)
@@ -86,22 +93,67 @@ class ExPanel extends JPanel implements KeyListener, ActionListener{
 	
 	JoinFrame joinFrame = null;
 	
+	JTable table = null;
+	
 	public ExPanel() {
 		setLayout(null);
 		setBounds(0,0,400,500);
 //		setTextField();
 //		setTextArea();
 		
+		
+		setTable();
 		setButton();
+		
+		init();
+	}
+
+	private void init() {
+		Random rn = new Random();
+		
+		String front [] = {"김","이","박","정","오"};
+		String back1 [] = {"성","지","우","아","희"};
+		String back2 [] = {"연","무","안","용","이"};
+		
+		for(int i = 0; i < 100; i ++) {
+			Vector<String> user = new Vector<>();
+			String name = front[rn.nextInt(front.length)] + back1[rn.nextInt(back1.length)]  + back2[rn.nextInt(back2.length)];
+			user.add(i + "");
+			user.add(i + "");
+			user.add(name);
+			this.users.add(user);
+		}
+	}
+
+	private void setTable() {
+		this.colName = new Vector<>();
+		this.colName.add("ID");
+		this.colName.add("PW");
+		this.colName.add("NAME");
+		
+		
+		// 생성
+		this.table = new JTable(this.users, this.colName);
+		this.table.setBounds(50,50,300,300);
+		
+		// 옵션
+		this.table.setBorder(new LineBorder(Color.red)); // 외곽선 색
+		this.table.setGridColor(Color.black); // 내부 선 색
+//		add(this.table);
+		
+		JScrollPane js = new JScrollPane(this.table); // 인자 스크롤링 하고 싶은 데이터 객체
+		js.setBounds(50,50,300,300);
+		js.setAutoscrolls(true); // default true
+		add(js);
 	}
 
 	private void setButton() {
-		this.join.setBounds(210,100,100,100);
+		this.join.setBounds(210,380,100,50);
 		this.join.setText("Join");
 		this.join.addActionListener(this);
 		add(this.join);
 
-		this.login.setBounds(100,100,100,100);
+		this.login.setBounds(100,380,100,50);
 		this.login.setText("Login");
 		this.login.addActionListener(this);
 		add(this.login);
@@ -157,6 +209,9 @@ class ExPanel extends JPanel implements KeyListener, ActionListener{
 			
 			System.out.println("회원가입 완료!");
 			System.out.println("users.size()" + this.users.size());
+			
+			this.table.revalidate();
+			this.table.repaint();
 			
 			this.joinFrame.dispose(); // 프레임에 대한 창 닫기
 		}

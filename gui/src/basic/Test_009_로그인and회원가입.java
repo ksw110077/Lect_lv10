@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 
@@ -290,6 +291,8 @@ class JoinPopup extends MyFrameUtil{
 				user.add(name);
 				
 				this.um.getData().add(user);
+				
+				
 				this.um.save();
 				
 				dispose();
@@ -423,6 +426,11 @@ class logJoinPanel extends MyUtil{
 	
 	private JLabel logId = new JLabel();
 	
+	private Vector<String> colName = null;
+	private JTable jt = null;
+	
+	// 50 부터
+	
 	public logJoinPanel() { // 로그인 회원가입 버튼 두개
 		setLayout(null);
 		setBounds(0,0,500,300);
@@ -439,12 +447,12 @@ class logJoinPanel extends MyUtil{
 
 	private void setbtn() {
 		this.login.setText("LOGIN");
-		this.login.setBounds(40,50,200,200);
+		this.login.setBounds(40,10,200,30);
 		this.login.addActionListener(this);
 		add(this.login);
 		
 		this.join.setText("JOIN");
-		this.join.setBounds(260,50,200,200);
+		this.join.setBounds(260,10,200,30);
 		this.join.addActionListener(this);
 		add(this.join);
 	}

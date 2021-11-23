@@ -93,7 +93,6 @@ public class PanelCoffee extends MyPanelUtil {
 				if (t == item) {
 					
 					ItemPopUp itemP = new ItemPopUp(item);
-					
 					PanelBill.getTable().revalidate();
 					PanelBill.getTable().repaint();
 				}

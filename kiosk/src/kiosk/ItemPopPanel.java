@@ -137,6 +137,8 @@ public class ItemPopPanel extends MyPanelUtil {
 					temp.add("" + total);
 					this.om.getData().add(temp);
 				}
+				PanelBill.getTable().revalidate();
+				PanelBill.getTable().repaint();
 				System.out.println("닫기");
 			}
 		}

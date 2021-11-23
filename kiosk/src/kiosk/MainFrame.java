@@ -30,10 +30,9 @@ public class MainFrame extends JFrame implements ActionListener{
 	// 커피, 차 파일 처리
 	// 주소, 이름, 가격
 	
-	
-	private Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
-	public final int W = this.dm.width;
-	public final int H = this.dm.height;
+	private static Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
+	public static final int W = dm.width;
+	public static final int H = dm.height;
 	
 	private PanelBill p0;
 	private PanelCoffee p1;
@@ -45,7 +44,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	public MainFrame() {
 		setTitle("ONE CAFE");
 		setLayout(null);
-		setBounds(this.W / 2 - 350, this.H / 2 - 500,700 + 14,1000 + 37);
+		setBounds(W / 2 - 350, H / 2 - 500,700 + 14,1000 + 37);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		setBtn();
@@ -64,20 +63,15 @@ public class MainFrame extends JFrame implements ActionListener{
 		this.coffee = new JButton();
 		this.coffee.setText("Coffee");
 		this.coffee.setBounds(350 - 82,5,80,30);
-//		this.coffee.setBorder(b);
-		
 		this.coffee.setFont(new Font("", Font.BOLD, 13));
 		this.coffee.setBackground(new Color(249, 213, 167));
-//		this.coffee.setBackground(Color.white);
 		this.coffee.addActionListener(this);
 		
 		this.tea = new JButton();
 		this.tea.setText("Tea");
 		this.tea.setBounds(350 + 2,5,80,30);
-//		this.tea.setBorder(b);
 		this.tea.setFont(new Font("", Font.BOLD, 15));
 		this.tea.setBackground(new Color(249, 213, 167));
-//		this.tea.setBackground(Color.white);
 		this.tea.addActionListener(this);
 		
 		add(this.coffee);

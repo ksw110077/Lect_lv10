@@ -22,6 +22,10 @@ import javax.swing.border.LineBorder;
 
 class JoinFrame extends JFrame{
 	
+	JLabel label = new JLabel("text<br>");
+	// html 코드로 변경 줄바꿈 태그는 <br>
+	
+	
 	JLabel idLabel = new JLabel("id : ");
 	JLabel pwLabel = new JLabel("pw : ");
 	JLabel nameLabel = new JLabel("name : ");
@@ -105,7 +109,7 @@ class ExPanel extends JPanel implements KeyListener, ActionListener{
 		setTable();
 		setButton();
 		
-		init();
+//		init();
 	}
 
 	private void init() {

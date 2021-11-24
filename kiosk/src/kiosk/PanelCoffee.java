@@ -15,14 +15,16 @@ import javax.swing.JFrame;
 
 public class PanelCoffee extends MyPanelUtil {
 	private OrderManager om = OrderManager.getInstance();
+	
+	private ItemPopUp itemP = null;
 
 	private Vector<Item> items = null; // jbutton
 //	x 700 - 400 60 60 60 60 60
 //	y 600 - 40 - 400 80 40 40 40
+	
+	public static boolean chk;
 
 	public PanelCoffee(int x, int y, int w, int h) {
-		System.out.println(w); // x
-		System.out.println(h); // y
 		init();
 		setLayout(null);
 		setBounds(x, y, w, h);
@@ -73,7 +75,8 @@ public class PanelCoffee extends MyPanelUtil {
 			ImageIcon im = new ImageIcon(url);
 			t.setIcon(im);
 			t.setBounds(x, y, 100, 100);
-			t.setBackground(new Color(249, 243, 223));
+			t.setBorderPainted(false);
+			t.setBackground(Color.white);
 			add(t);
 			t.addActionListener(this);
 			x += 160;
@@ -88,11 +91,12 @@ public class PanelCoffee extends MyPanelUtil {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof Item) {
 			Item t = (Item) e.getSource();
+			
 			for (int i = 0; i < this.items.size(); i++) {
 				Item item = this.items.get(i); // 버튼
-				if (t == item) {
-					
-					ItemPopUp itemP = new ItemPopUp(item);
+				if (t == item && chk == false) {
+					chk = true;
+					this.itemP = new ItemPopUp(new ItemPopPanel(item));
 					PanelBill.getTable().revalidate();
 					PanelBill.getTable().repaint();
 				}

@@ -6,30 +6,16 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
-public class MainFrame extends JFrame implements ActionListener{
-	
-	// 화면 
-	
-	// P1 or P2 메뉴(default는 P1)
-	
-	// 항상 고정
-	// P0. 테이블 <- 업데이트 처리 고민
-	// 현재 수량 + 총액
-	// P0.주문하기 / 처음으로 버튼
-	
-	// 메뉴 선택시 수량 선택 팝업
-	// "+" "cnt(라벨)? 테이블? 수정가능이니까 테이블?" "-" 버튼  
-	// 선택완료 버튼
-	
-	// 커피, 차 파일 처리
-	// 주소, 이름, 가격
-	
+public class MainFrame extends JFrame implements ActionListener, Runnable{
 	private static Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
 	public static final int W = dm.width;
 	public static final int H = dm.height;
@@ -38,6 +24,11 @@ public class MainFrame extends JFrame implements ActionListener{
 	private PanelCoffee p1;
 	private PanelTea p2;
 	
+	
+	private long time = System.currentTimeMillis();
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 E요일 kk시 mm분 ss초");
+	
+	private JLabel timer;
 	private JButton coffee;
 	private JButton tea;
 	
@@ -47,6 +38,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		setBounds(W / 2 - 350, H / 2 - 500,700 + 14,1000 + 37);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
+		
+		setLabel();
 		setBtn();
 		setP0();
 		setP1();
@@ -55,10 +48,13 @@ public class MainFrame extends JFrame implements ActionListener{
 		setVisible(true);
 		revalidate();
 	}
-	
-	
+	private void setLabel() {
+		this.timer = new JLabel(this.sdf.format(this.time));
+		this.timer.setBounds(390,25,300,50);
+		this.timer.setFont(new Font("", Font.BOLD, 15));
+		add(this.timer);
+	}
 	private void setBtn() {
-//		LineBorder b = new LineBorder(new Color(249, 213, 167),1);
 		
 		this.coffee = new JButton();
 		this.coffee.setText("Coffee");
@@ -109,4 +105,18 @@ public class MainFrame extends JFrame implements ActionListener{
 			}
 		}
 	}
+	
+	@Override
+	public void run() {
+		while(true) {
+			try {
+				Thread.sleep(1000);
+				this.time = System.currentTimeMillis();
+				this.timer.setText(this.sdf.format(this.time));
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+	}
+	
 }

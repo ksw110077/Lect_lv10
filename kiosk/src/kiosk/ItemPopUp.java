@@ -1,34 +1,44 @@
 package kiosk;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-public class ItemPopUp extends JFrame implements WindowListener{
+public class ItemPopUp extends JFrame implements ActionListener,WindowListener{
 	private OrderManager om = OrderManager.getInstance();
-	private Item item = null;
 	private ItemPopPanel panel = null;
-	public ItemPopUp(Item item) {
+	public static boolean chk;
+	
+	public ItemPopUp(ItemPopPanel panel) {
 		// 250 * 300
-		this.item = item;
+		this.panel = panel;
 		setLayout(null);
 		setBounds(MainFrame.W / 2 - 175, MainFrame.H / 2 - 250, 350 + 14, 500 + 37);
-		this.panel = new ItemPopPanel(item);
+		
+		this.panel.add.addActionListener(this);
 		add(this.panel);
 		
 		setVisible(true);
 		revalidate();
 	}
+	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == this.panel.add) {
+			this.panel.runAdd();
+
+			this.om.updateTotal();
+			PanelBill.getTotal().setText(this.om.getTotal() + " 원");
+			PanelTea.chk = false;
+			PanelCoffee.chk = false;
+			this.dispose();
+		}
+	}
+
 	
 	@Override
 	public void windowOpened(WindowEvent e) {
@@ -36,6 +46,8 @@ public class ItemPopUp extends JFrame implements WindowListener{
 
 	@Override
 	public void windowClosing(WindowEvent e) {
+		PanelTea.chk = false;
+		PanelCoffee.chk = false;
 		dispose();
 	}
 
@@ -58,5 +70,4 @@ public class ItemPopUp extends JFrame implements WindowListener{
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 	}
-
 }

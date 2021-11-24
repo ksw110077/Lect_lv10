@@ -11,8 +11,12 @@ import javax.swing.ImageIcon;
 
 public class PanelTea extends MyPanelUtil {
 	private OrderManager om = OrderManager.getInstance();
+	
+	private ItemPopUp itemP = null;
 
 	private Vector<Item> items = null;
+	
+	public static boolean chk;
 
 	public PanelTea(int x, int y, int w, int h) {
 		init();
@@ -65,7 +69,8 @@ public class PanelTea extends MyPanelUtil {
 			ImageIcon im = new ImageIcon(url);
 			t.setIcon(im);
 			t.setBounds(x, y, 100, 100);
-			t.setBackground(new Color(249, 243, 223));
+			t.setBorderPainted(false);
+			t.setBackground(Color.white);
 			add(t);
 			t.addActionListener(this);
 			x += 160;
@@ -80,41 +85,12 @@ public class PanelTea extends MyPanelUtil {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof Item) {
 			Item t = (Item) e.getSource();
+			
 			for (int i = 0; i < this.items.size(); i++) {
 				Item item = this.items.get(i); // 버튼
-				if (t == item) {
-					int idx = -1;
-					for (int j = 0; j < this.om.getData().size(); j++) {
-						if (this.om.getData().get(j).get(0).equals(item.getName())) {
-							idx = j;
-						}
-					}
-					// name , price, number, total
-
-					if (idx != -1) { // 중복
-						String name = this.om.getData().get(idx).get(0);
-						int price = Integer.parseInt(this.om.getData().get(idx).get(1));
-						int num = Integer.parseInt(this.om.getData().get(idx).get(2));
-						int total = Integer.parseInt(this.om.getData().get(idx).get(3));
-						num++;
-						total = num * price;
-
-						this.om.getData().get(idx).set(2, String.valueOf(num));
-						this.om.getData().get(idx).set(3, String.valueOf(total));
-					} else {
-						String name = item.getName();
-						String price = "" + item.getPrice();
-						String num = "" + 1;
-						String total = price + "";
-
-						Vector<String> temp = new Vector<String>();
-						temp.add(name);
-						temp.add(price);
-						temp.add(num);
-						temp.add(total);
-
-						this.om.getData().add(temp);
-					}
+				if (t == item && chk == false) {
+					chk = true;
+					this.itemP = new ItemPopUp(new ItemPopPanel(item));
 					PanelBill.getTable().revalidate();
 					PanelBill.getTable().repaint();
 				}

@@ -15,15 +15,14 @@ import kiosk.ItemPopUp;
 public class ItemPopPanel extends MyPanelUtil {
 	private OrderManager om = OrderManager.getInstance();
 	private Item item = null;
-	private JPanel panel = null;
 	private JLabel im = null;
 	private JLabel num = null;
 	private JButton plus = null;
 	private JButton minus = null;
-	private JButton add = null;
-	private String url;
-	private boolean chk;
 	
+	public JButton add = null;
+	
+	private String url;
 	
 	public ItemPopPanel(Item item) {
 		setLayout(null);
@@ -58,6 +57,8 @@ public class ItemPopPanel extends MyPanelUtil {
 		String url = "images\\마이너스.png";
 		ImageIcon im = new ImageIcon(url);
 		this.minus.setIcon(im);
+		this.minus.setBorderPainted(false);
+		this.minus.setBackground(Color.white);
 		this.minus.addActionListener(this);
 
 		
@@ -66,6 +67,8 @@ public class ItemPopPanel extends MyPanelUtil {
 		im = new ImageIcon(url);
 		this.plus.setIcon(im);
 		this.plus.setBounds(x, y, 50, 50);
+		this.plus.setBorderPainted(false);
+		this.plus.setBackground(Color.white);
 		this.plus.addActionListener(this);
 		
 		x = 350 / 2 - 50;
@@ -75,7 +78,7 @@ public class ItemPopPanel extends MyPanelUtil {
 		this.add.setBackground(new Color(221, 221, 221));
 		this.add.setText("추가하기");
 		this.add.setFont(new Font("", Font.BOLD, 15));
-		this.add.addActionListener(this);
+		this.add.setBorderPainted(false);
 		
 		add(this.minus);
 		add(this.plus);
@@ -93,6 +96,41 @@ public class ItemPopPanel extends MyPanelUtil {
 		add(this.num);
 	}
 	
+	public void runAdd(){
+		if(!this.num.getText().equals("0")) {
+			int idx = -1;
+			String name = this.item.getName();
+			String price = "" + this.item.getPrice();
+			int num = Integer.parseInt(this.num.getText());
+			int total = num * Integer.parseInt(price);
+			
+			for(int i = 0; i < this.om.getData().size(); i++) {
+				String oName = this.om.getData().get(i).get(0);
+				if(oName.equals(name)) {
+					idx = i;
+				}
+			}
+			
+			if(idx != -1) {
+				num = Integer.parseInt(this.num.getText()) + Integer.parseInt(this.om.getData().get(idx).get(2));
+				total = num * Integer.parseInt(price);
+				this.om.getData().get(idx).set(2, "" + num);
+				this.om.getData().get(idx).set(3, "" + total);
+			}
+			else {
+				Vector<String>	 temp = new Vector<>();
+				temp.add(name);
+				temp.add(price);
+				temp.add("" + num);
+				temp.add("" + total);
+				this.om.getData().add(temp);
+			}
+			ItemPopUp.chk = true;
+			PanelBill.getTable().revalidate();
+			PanelBill.getTable().repaint();
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() instanceof JButton) {
@@ -108,38 +146,6 @@ public class ItemPopPanel extends MyPanelUtil {
 				int num = Integer.parseInt(this.num.getText());
 				num ++;
 				this.num.setText("" + num);
-			}
-			else if (t == this.add) {
-				int idx = -1;
-				String name = this.item.getName();
-				String price = "" + this.item.getPrice();
-				int num = Integer.parseInt(this.num.getText());
-				int total = num * Integer.parseInt(price);
-				
-				for(int i = 0; i < this.om.getData().size(); i++) {
-					String oName = this.om.getData().get(i).get(0);
-					if(oName.equals(name)) {
-						idx = i;
-					}
-				}
-				
-				if(idx != -1) {
-					num = Integer.parseInt(this.num.getText()) + Integer.parseInt(this.om.getData().get(idx).get(2));
-					total = num * Integer.parseInt(price);
-					this.om.getData().get(idx).set(2, "" + num);
-					this.om.getData().get(idx).set(3, "" + total);
-				}
-				else {
-					Vector<String>	 temp = new Vector<>();
-					temp.add(name);
-					temp.add(price);
-					temp.add("" + num);
-					temp.add("" + total);
-					this.om.getData().add(temp);
-				}
-				PanelBill.getTable().revalidate();
-				PanelBill.getTable().repaint();
-				System.out.println("닫기");
 			}
 		}
 	}
